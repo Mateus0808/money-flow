@@ -1,11 +1,13 @@
 'use client'
 
-import { FormGoal } from "@/components/goal/FormGoal";
-import { goalSchema } from "@/libs/validation/goalSchema";
-import { GoalTypeResponse } from "@/types/GoalType";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { use, useEffect } from "react";
 import { useForm } from "react-hook-form";
+
+import { GoalTypeResponse } from "@/types/GoalType";
+import { goalSchema } from "@/libs/validation/goalSchema";
+
+import { FormGoal } from "@/components/goal/FormGoal";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 
 export default function EditGoal({ params }: { params: Promise<{ id: string }> }) {

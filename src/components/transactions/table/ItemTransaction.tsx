@@ -1,8 +1,8 @@
 'use client'
 
-import { useTransactionsStore } from "@/hooks/useTransaction"
 import { Trash2 } from "lucide-react"
 import { ItemTDTable } from "./ItemTDTable";
+import { useTransactionsStore } from "@/stores/useTransactionsStore";
 
 interface ItemTransactionProps {
   _id: string;

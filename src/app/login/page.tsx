@@ -2,7 +2,7 @@
 import Image from "next/image"
 import { SignInPageUI } from "./page-ui";
 import { useState } from "react";
-import { useAuthStore } from "@/hooks/useAuthStore";
+import { useAuthStore } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 
 export default function SignInPage() {

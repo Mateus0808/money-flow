@@ -2,12 +2,13 @@
 
 import { Currency, LayoutDashboard, Settings, FileText, LogOut, Goal, Home } from "lucide-react";
 import Link from "next/link"
-import { useAuthStore } from "@/hooks/useAuthStore";
+import { useAuthStore } from "@/hooks/useAuth";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useTheme } from "@/hooks/useTheme";
 import { useEffect, useState } from "react";
+import clsx from "clsx";
 
 const menuItems = [
   { name: "Home", icon: <Home size={24} />, path: "/home" },
@@ -68,9 +69,23 @@ export default function Sidebar() {
 
         <button
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="p-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-white"
+          className={clsx(
+            "p-2 rounded-lg bg-gray-200 hover:bg-gray-300 hover:text-black text-gray-800",
+            "dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white",
+            "flex items-center justify-center gap-2 transition duration-200"
+          )}
         >
-          {theme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode"}
+          {theme === "dark" ? (
+            <>
+              <span>☀️</span>
+              {isDesktop && <span>Light Mode</span>}
+            </>
+          ) : (
+            <>
+              <span>🌙</span>
+              {isDesktop && <span>Dark Mode</span>}
+            </>
+          )}
         </button>
       </nav>
     </aside>

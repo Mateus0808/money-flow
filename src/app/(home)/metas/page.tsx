@@ -1,13 +1,16 @@
 'use client'
 
-import { GoalCard } from "@/components/goal/GoalCard";
-import { useGoals, useGoalStore } from "@/hooks/useGoals";
-import { PlusCircle } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
-import LoadingGoals from "./loading";
+import Link from "next/link";
+import { PlusCircle } from "lucide-react";
+
+import { useGoals } from "@/hooks/useGoals";
+
 import { PaginationControls } from "@/components/PaginationControls";
+import { GoalCard } from "@/components/goal/GoalCard";
 import { FiltersGoal } from "@/components/goal/FiltersGoal";
+
+import LoadingGoals from "./loading";
 
 
 export default function ListGoalsPage() {
@@ -18,7 +21,6 @@ export default function ListGoalsPage() {
   const { goals, loading, pagination, setPagination, deleteGoal } = useGoals({ 
     priority, month, year
   })
-
 
   return (
     <div className="min-h-screen">

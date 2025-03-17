@@ -1,9 +1,9 @@
 'use client'
-import { FormGoal } from '@/components/goal/FormGoal';
-import { goalSchema } from '@/libs/validation/goalSchema';
 import { useForm } from 'react-hook-form';
+import { goalSchema } from '@/libs/validation/goalSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Breadcrumb from '@/components/Breadcrumb';
+import { FormGoal } from '@/components/goal/FormGoal';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 
 export default function CreateGoal() {
   const {

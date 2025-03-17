@@ -1,36 +1,22 @@
 import { useEffect } from 'react';
-import { create } from 'zustand';
-
-interface MediaQueryStore {
-  matches: boolean;
-  query: string;
-  setMatches: (matches: boolean) => void;
-  setQuery: (query: string) => void;
-}
-
-export const useMediaQueryStore = create<MediaQueryStore>((set) => ({
-  matches: false,
-  query: "",
-  setMatches: (matches) => set({ matches }),
-  setQuery: (query) => set({ query }),
-}))
+import { useMediaQueryStore } from '@/stores/useMediaQueryStore';
 
 export const useMediaQuery = (query: string) => {
-  const { matches, setMatches, setQuery } = useMediaQueryStore();
+  const { matches, setMatches  } = useMediaQueryStore();
 
   useEffect(() => {
-    setQuery(query);
-
     const media = window.matchMedia(query);
-    if (media.matches !== matches) {
-      setMatches(media.matches);
-    }
 
-    const listener = () => setMatches(media.matches);
-    window.addEventListener('resize', listener);
-    
-    return () => window.removeEventListener('resize', listener);
-  }, [matches, query, setMatches, setQuery]);
+    const updateMatches = (event: MediaQueryListEvent) => {
+      setMatches(event.matches);
+    };
+
+    setMatches(media.matches);
+
+    media.addEventListener("change", updateMatches);
+
+    return () => media.removeEventListener("change", updateMatches);
+  }, [query, setMatches]);
 
   return matches;
 };

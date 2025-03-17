@@ -29,7 +29,6 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     
     const page = parseInt(searchParams.get("page") || "1", 10);
-
     const limitParam = searchParams.get("limit")
     const minLimit = Math.min(parseInt(limitParam || '10', 10), 10);
     const limit = limitParam === "all" ? undefined : minLimit
@@ -45,19 +44,21 @@ export async function GET(req: Request) {
       filter.date = {};
       if (startDate) filter.date.$gte = new Date(startDate);
       if (endDate) filter.date.$lte = new Date(endDate);
-    } else {
-      const thirtyDaysAgo = new Date();
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      filter.date = { $gte: thirtyDaysAgo };
     }
-
+    // else {
+    //   const thirtyDaysAgo = new Date();
+    //   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    //   filter.date = { $gte: thirtyDaysAgo };
+    // }
     if (category) filter.category = category;
     if (type) filter.type = type;
-    
+
     const query = Transaction.find(filter).sort({ date: -1 });
+
     if (limit !== undefined) {
       query.skip((page - 1) * limit).limit(limit);
     }
+
     const transactions = await query;
     const totalTransactions = await Transaction.countDocuments(filter);
 
@@ -67,11 +68,11 @@ export async function GET(req: Request) {
         total: totalTransactions,
         page: limit === undefined ? 1 : page,
         totalPages: limit === undefined ? 1 : Math.ceil(totalTransactions / limit),
-        limit: limit === undefined ? totalTransactions : limit
+        limit: limit === undefined ? 10 : limit
       }
     }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ message: "Erro ao buscar transações" }, { status: 500 });
+    return NextResponse.json({ message: "Erro interno no servidor" }, { status: 500 });
   }
 }
 

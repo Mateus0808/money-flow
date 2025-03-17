@@ -9,7 +9,7 @@ import {
   Trash2, 
   DollarSign
 } from "lucide-react";
-import { Tooltip } from "../Tooltip";
+import { Tooltip } from "../ui/Tooltip";
 import { EnumGoalPriority, GoalTypeResponse } from "@/types/GoalType";
 import Link from "next/link";
 

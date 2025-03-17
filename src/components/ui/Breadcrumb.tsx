@@ -1,4 +1,5 @@
 "use client";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -10,7 +11,7 @@ export default function Breadcrumb() {
     <nav className="text-gray-600 text-sm w-full">
       <ol className="flex items-center gap-2">
         <li>
-          <Link href="/home" className="text-blue-700 font-bold hover:underline">
+          <Link href="/home" className="text-gray-400 font-bold hover:underline">
             Home
           </Link>
         </li>
@@ -22,11 +23,11 @@ export default function Breadcrumb() {
 
           return (
             <li key={path} className="flex items-center">
-              <span className="mx-1"> &gt;&gt; </span>
+              <ChevronRight size={16} className="mr-1 text-gray-400"/>
               {isLast ? (
                 <span className="text-gray-400 font-bold">{formattedSegment}</span>
               ) : (
-                <Link href={path} className="text-blue-700 font-bold hover:underline">
+                <Link href={path} className="text-gray-400 font-bold hover:underline">
                   {formattedSegment}
                 </Link>
               )}

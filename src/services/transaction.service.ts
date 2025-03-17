@@ -31,7 +31,7 @@ export const getIncomesAndExpenses = (transactions: TransactionType[]) => {
   return { incomes, expenses };
 };
 
-export const getMonthlyData = (transactions: TransactionType[]) => {
+export const getMonthlyData = (transactions: TransactionType[], type?: "deposit" | "withdraw" | "total" | "") => {
   const monthlyExpenses = Array(12).fill(0);
   const monthlyIncomes = Array(12).fill(0);
 
@@ -44,7 +44,9 @@ export const getMonthlyData = (transactions: TransactionType[]) => {
     }
   });
 
-  const total = monthlyIncomes.map((income, index) => income - monthlyExpenses[index]);
+  const total = (type === 'total' || type === "" || type === undefined)
+    ? monthlyIncomes.map((income, index) => income - monthlyExpenses[index])
+    : undefined
 
   return { monthlyExpenses, monthlyIncomes, total };
 };

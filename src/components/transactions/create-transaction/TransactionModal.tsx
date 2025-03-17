@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { RadioBox } from "./RadioBox"
-import { useTransactionsStore } from "@/hooks/useTransaction"
+import { useTransactionsStore } from "@/stores/useTransactionsStore"
 
 interface TransactionModalProps {
   isOpen: boolean
