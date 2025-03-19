@@ -10,30 +10,45 @@ import {
   DollarSign
 } from "lucide-react";
 import { Tooltip } from "../ui/Tooltip";
-import { EnumGoalPriority, GoalTypeResponse } from "@/types/GoalType";
+import { EnumGoalPriority, GoalTypeResponse } from "@/types/goal-type";
 import Link from "next/link";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { errorNotify, successNotify } from "@/libs/notify/notify";
+import { useGenericMutation } from "@/hooks/useGenericMutation";
+
+
+const priorityIcons = {
+  Baixa: <CheckCircle className="text-green-600" size={18} />,
+  Média: <AlertCircle className="text-orange-600" size={18} />,
+  Alta: <XCircle className="text-red-600" size={18} />,
+};
+
+const priorityColor = {
+  [EnumGoalPriority.LOW]: "bg-green-400",
+  [EnumGoalPriority.MEDIUM]: "bg-orange-400",
+  [EnumGoalPriority.HIGH]: "bg-red-400",
+};
 
 type GoalCardProps = {
   goal: GoalTypeResponse
-  deleteGoal: (id: string) => void
+  deleteGoal: (id: string) => Promise<void>
 }
 
 export const GoalCard = ({ goal, deleteGoal }: GoalCardProps) => {
-  const priorityIcons = {
-    Baixa: <CheckCircle className="text-green-600" size={18} />,
-    Média: <AlertCircle className="text-orange-600" size={18} />,
-    Alta: <XCircle className="text-red-600" size={18} />,
-  };
-
-  const priorityColor = {
-    [EnumGoalPriority.LOW]: "bg-green-400",
-    [EnumGoalPriority.MEDIUM]: "bg-orange-400",
-    [EnumGoalPriority.HIGH]: "bg-red-400",
-  };
+  const queryClient = useQueryClient();
 
   const progress = Math.ceil((goal.initialAmount * 100) / goal.targetAmount)
-  const validDate = true //new Date() > new Date(goal.deadline)
-  console.log('goal', goal)
+
+  const deleteGoalMutation = useGenericMutation({
+    mutationFn: (goalId: string) => deleteGoal(goalId),
+    queryKey: "goals",
+    successMessage: "Meta deletada com sucesso",
+  });
+
+  const handleOnDelete = async () => {
+    deleteGoalMutation.mutate(goal._id)
+  };
+
   return (
     <div className="flex flex-col gap-4 shadow-lg p-6 bg-white dark:bg-cardDark rounded-lg">
       <div className="flex justify-between items-center">
@@ -95,7 +110,7 @@ export const GoalCard = ({ goal, deleteGoal }: GoalCardProps) => {
       </div>
 
       <div className="flex justify-end items-center gap-3">
-        <button onClick={() => deleteGoal(goal._id)}>
+        <button onClick={handleOnDelete}>
           <Trash2 size={24} className="text-red-500 hover:text-red-600" />
         </button>
         <Link href={`/metas/editar/${goal._id}`}>

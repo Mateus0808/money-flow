@@ -1,4 +1,4 @@
-import { EnumGoalPriority } from "@/types/GoalType";
+import { EnumGoalPriority } from "@/types/goal-type";
 
 interface FiltersGoalProps {
   priority: string

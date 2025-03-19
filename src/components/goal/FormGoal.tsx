@@ -1,25 +1,32 @@
 import Link from "next/link"
+import { NumericFormat } from 'react-number-format';
 import { CheckBoxField } from "../ui/CheckBoxField"
 import { InputField } from "../ui/InputField"
 import { SelectField } from "../ui/SelectField"
 import { TextAreaField } from "../ui/TextAreaField"
-import { EnumGoalPriority, IGoalType } from "@/types/GoalType"
+import { EnumGoalPriority, IGoalType } from "@/types/goal-type"
 import { getAllGoalCategories } from "@/services/category.service"
-import { FieldErrors, SubmitHandler, UseFormHandleSubmit, UseFormRegister } from "react-hook-form"
+import { Control, Controller, FieldErrors, SubmitHandler, UseFormHandleSubmit, UseFormRegister, UseFormWatch } from "react-hook-form"
+import clsx from "clsx"
+import { LoadingButton } from "../shared/LoadingButton"
 
 interface FormGoalProps {
   handleSubmit: UseFormHandleSubmit<IGoalType>
   onSubmit: SubmitHandler<IGoalType>
   register: UseFormRegister<IGoalType>
   errors: FieldErrors<IGoalType>
-  showContributionField: boolean
+  control: Control<IGoalType>
+  showContributionField: boolean,
+  isLoading: boolean
+  type: "EDIT" | "CREATE"
 }
 
 export const FormGoal = ({ 
-  handleSubmit, onSubmit, register, showContributionField, errors
+  handleSubmit, onSubmit, register, showContributionField, 
+  errors, isLoading, type, control
 }: FormGoalProps) => {
   const goalCategories = getAllGoalCategories();
-
+  console.log("errors", errors)
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <InputField
@@ -35,18 +42,47 @@ export const FormGoal = ({
         error={errors.goalType?.message} 
       />
       <div className="flex w-full gap-4">
-        <InputField 
-          label="Valor Inicial *" 
-          register={register("initialAmount", { valueAsNumber: true })}  
-          type="number" 
-          error={errors.initialAmount?.message} 
+        <Controller
+          name="initialAmount"
+          control={control}
+          render={({ field: { value, onChange, ...props }, fieldState: { error } }) => (
+            <NumericFormat
+              customInput={InputField}
+              prefix="R$ "
+              onValueChange={(values) => onChange(values.floatValue)}
+              thousandSeparator="."
+              decimalSeparator=","
+              suffix=",00"
+              decimalScale={2}
+              allowNegative={false}
+              label="Valor Inicial *"
+              error={error?.message}
+              placeholder="R$ 0,00"
+              {...props}
+            />
+          )}
         />
-        <InputField 
-          label="Valor Alvo *"
-          register={register("targetAmount", { valueAsNumber: true })} 
-          type="number" 
-          error={errors.targetAmount?.message} 
+        <Controller
+          name="targetAmount"
+          control={control}
+          render={({ field: { value, onChange, ...props }, fieldState: { error } }) => (
+            <NumericFormat
+              customInput={InputField}
+              prefix="R$ "
+              onValueChange={(values) => onChange(values.floatValue)}
+              thousandSeparator="."
+              decimalSeparator=","
+              suffix=",00"
+              decimalScale={2}
+              allowNegative={false}
+              label="Valor Alvo *"
+              error={error?.message}
+              placeholder="R$ 0,00"
+              {...props}
+            />
+          )}
         />
+        
       </div>          
       <div className="flex w-full gap-4">
         <SelectField 
@@ -56,12 +92,26 @@ export const FormGoal = ({
           error={errors.frequency?.message} 
         />
         {showContributionField && (
-          <InputField 
-            label="Aporte *" 
-            register={register("contribution", { valueAsNumber: true })}
-            type="number" 
-            error={errors.contribution?.message} 
-          />
+          <Controller
+          name="contribution"
+          control={control}
+          render={({ field: { value, onChange, ...props }, fieldState: { error } }) => (
+            <NumericFormat
+              customInput={InputField}
+              prefix="R$ "
+              onValueChange={(values) => onChange(values.floatValue)}
+              thousandSeparator="."
+              decimalSeparator=","
+              suffix=",00"
+              decimalScale={2}
+              allowNegative={false}
+              label="Aporte *"
+              error={error?.message} 
+              placeholder="R$ 0,00"
+              {...props}
+            />
+          )}
+        />
         )}
       </div>
       <InputField 
@@ -87,11 +137,19 @@ export const FormGoal = ({
         error={errors.reminder?.message} 
       />
       <div className="flex justify-end gap-2">
-        <Link className="min-w-24 flex justify-center items-center bg-gray-200 text-gray-900 p-2 rounded-md hover:bg-gray-300 transition duration-200" href="/metas">
+        <Link href="/metas" className={clsx(
+          'min-w-24 flex justify-center items-center bg-gray-200 text-gray-900 p-2',
+          'rounded-md hover:bg-gray-300 transition duration-200',
+          'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
+        )}>
           Cancelar
         </Link>
-        <button type="submit" className="min-w-28 flex justify-center items-center bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 transition duration-200">
-          Criar Meta
+        <button type="submit" disabled={isLoading} className={clsx(
+          'min-w-28 flex justify-center items-center bg-indigo-600',
+          'text-white p-2 rounded-md hover:bg-indigo-700 transition duration-200',
+          'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
+          )}>
+            { isLoading ? <LoadingButton /> : type === "EDIT" ? "Atualizar Meta" : "Criar Meta"}
         </button>
       </div>
     </form>
