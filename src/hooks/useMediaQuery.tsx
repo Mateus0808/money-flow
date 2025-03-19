@@ -1,22 +1,17 @@
-import { useEffect } from 'react';
-import { useMediaQueryStore } from '@/stores/useMediaQueryStore';
+import { useEffect, useState } from 'react';
 
-export const useMediaQuery = (query: string) => {
-  const { matches, setMatches  } = useMediaQueryStore();
+export const useMediaQuery = (query: string): boolean => {
+  const [matches, setMatches] = useState(false);
 
   useEffect(() => {
-    const media = window.matchMedia(query);
+    const mediaQuery = window.matchMedia(query);
+    setMatches(mediaQuery.matches);
 
-    const updateMatches = (event: MediaQueryListEvent) => {
-      setMatches(event.matches);
-    };
+    const handleResize = (e: MediaQueryListEvent) => setMatches(e.matches);
+    mediaQuery.addEventListener('change', handleResize);
 
-    setMatches(media.matches);
-
-    media.addEventListener("change", updateMatches);
-
-    return () => media.removeEventListener("change", updateMatches);
-  }, [query, setMatches]);
+    return () => mediaQuery.removeEventListener('change', handleResize);
+  }, [query]);
 
   return matches;
 };

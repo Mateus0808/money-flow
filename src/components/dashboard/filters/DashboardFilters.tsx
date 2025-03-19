@@ -76,6 +76,7 @@ export const DashboardFilters = ({
     const isValid = Boolean(newFilters.startDate && newFilters.endDate) || newFilters.type || newFilters.category;
 
     if (hasChanged && isValid) setFilters(newFilters);
+    toggleFiltersPanel()
   };
 
   const handleCleanFilters = () => {
@@ -169,7 +170,7 @@ export const DashboardFilters = ({
             className="dark:text-textLight dark:bg-gray-700 px-4 py-2 rounded-lg bg-gray-300 text-gray-700 flex gap-2 items-center hover:opacity-80">
             Limpar
           </button>
-          <Button label="Aplicar" onClick={applyFilters} />
+          <Button label="Aplicar" onClick={applyFilters} isLoading={false} />
         </div>
       </div>
     </div>

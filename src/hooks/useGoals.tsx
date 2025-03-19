@@ -1,25 +1,6 @@
 import { fetchGoals } from "@/services/goal.service";
-import { useGoalStore } from "@/stores/useGoalStore";
 import { PaginationType } from "@/types/pagination";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-
-// export function useGoals({ 
-//   priority = "", month = "", year = ""
-// }) {
-//   const { 
-//     goals, loading, deleteGoal, setPagination, fetchGoals, pagination 
-//   } = useGoalStore()
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       await fetchGoals({ month, priority, year });
-//     }
-//     fetchData()
-//   }, [pagination.page, priority, month, year]);
-
-//   return { goals, loading, deleteGoal, setPagination, pagination }
-// }
 
 interface UseGoalsProps {
   priority?: string;
@@ -34,7 +15,7 @@ export const useGoals = ({
   return useQuery({
     queryKey: ['goals', month, priority, year, pagination.page, pagination.limit],
     queryFn: () => fetchGoals({ month, priority, year, pagination }),
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 1,
     retry: 3,
     placeholderData: (previousData) => previousData ?? {
       goals: [],

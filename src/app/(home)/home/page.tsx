@@ -2,7 +2,6 @@
 
 import { errorNotify } from "@/libs/notify/notify";
 
-import { useAuth } from "@/hooks/useAuth";
 import { useGoals } from "@/hooks/useGoals";
 import { useTransactions } from "@/hooks/useTransactions";
 import { useFinanceDataStore } from "@/stores/useFinanceDataStore";
@@ -11,14 +10,13 @@ import { SimpleGoalCard } from "@/components/home/SimpleGoalCard";
 import { TransactionsTable } from "@/components/transactions/table/TransactionsTable";
 import { ChartsSection } from "@/components/shared/ChartsSection";
 import { CardContainer } from "@/components/shared/CardContainer";
+import { NoChartData } from "@/components/shared/NoChartData";
 
 import LoadingHome from "./loading";
 import { Summary } from "./summary";
-import { NoChartData } from "@/components/shared/NoChartData";
 
 
 export default function HomePage() {
-  const { loading } = useAuth()
   const { data: goalResponse } = useGoals({ pagination: {
     limit: 3, page: 1, total: 0, totalPages: 1
   }})
@@ -33,7 +31,7 @@ export default function HomePage() {
     return null
   }
 
-  if (loading || isFetching || !data?.transactions) return <LoadingHome />;
+  if (isFetching || !data) return <LoadingHome />;
 
   return (
     <div className="flex flex-col gap-8">

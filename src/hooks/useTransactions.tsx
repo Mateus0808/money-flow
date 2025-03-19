@@ -11,7 +11,7 @@ export const useTransactions = ({ page, limit, filters }: UseTransactionType) =>
   return useQuery({
     queryKey: ['transactions', page, limit, filters],
     queryFn: () => fetchTransactions(page, limit, filters),
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 1,
     retry: 3,
     placeholderData: (previousData) => previousData ?? {
       transactions: [],

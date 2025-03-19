@@ -8,9 +8,7 @@ interface ErrorProps {
 }
 
 export default function Error({ error, reset }: ErrorProps) {
-  useEffect(() => {
-    console.error("Dashboard Error:", error)
-  }, [error])
+  useEffect(() => {}, [error])
 
   return (
     <div className="flex flex-col items-center justify-center h-screen text-center px-6">

@@ -22,12 +22,12 @@ export default function DashboardPage() {
   const filteredTransactions = useDashboardFilters(data?.transactions || [], dashboardFilters);
   const [openFilter, setOpenFilter] = useState(false)
 
-  const { chartBarData, radarChartData } = useFinanceDataStore(
+  const { chartBarData } = useFinanceDataStore(
     filteredTransactions, 
     dashboardFilters.type, 
     dashboardFilters.category
   );
-  const { fiveOutcomeCharData } = useFinanceDataStore(filteredTransactions)
+  const { fiveOutcomeCharData, radarChartData } = useFinanceDataStore(filteredTransactions)
 
   const toggleFiltersPanel = () => setOpenFilter(!openFilter)
 

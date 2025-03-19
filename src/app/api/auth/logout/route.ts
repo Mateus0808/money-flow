@@ -7,10 +7,11 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
 
-    response.headers.set(
-      "Set-Cookie",
-      "ftoken=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0"
-    );
+    const deleteCookie = (name: string) => 
+      `${name}=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0`;
+
+    response.headers.append("Set-Cookie", deleteCookie("mfToken"));
+    response.headers.append("Set-Cookie", deleteCookie("moneyId"));
 
     return response;
   } catch (error) {

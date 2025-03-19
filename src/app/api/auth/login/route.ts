@@ -45,14 +45,15 @@ export async function POST(req: NextRequest) {
     const response = NextResponse.json(
       { 
         user: { 
-          id: user._id, email: user.email, name: user.nama 
+          id: user._id, email: user.email, name: user.name 
         }, 
         message: "Login realizado com sucesso" 
       },
       { status: 200 }
     );
-    response.headers.set("Set-Cookie", `ftoken=${token}; Path=/; HttpOnly; Secure; SameSite=Lax`);
-    response.headers.set("Set-Cookie", `moneyId=${user._id}; Path=/; HttpOnly; Secure; SameSite=Lax`);
+
+    response.headers.append("Set-Cookie", `mfToken=${token}; Path=/; HttpOnly; Secure; SameSite=Lax`);
+    response.headers.append("Set-Cookie", `moneyId=${user._id}; Path=/; HttpOnly; Secure; SameSite=Lax`);
 
     return response
   } catch (error) {

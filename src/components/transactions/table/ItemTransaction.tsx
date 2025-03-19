@@ -3,6 +3,8 @@
 import { Trash2 } from "lucide-react"
 import { ItemTDTable } from "./ItemTDTable";
 import { useTransactionsStore } from "@/stores/useTransactionsStore";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { formatDate } from "@/utils/format-date";
 
 interface ItemTransactionProps {
   _id: string;
@@ -17,6 +19,7 @@ interface ItemTransactionProps {
 export const ItemTransaction = ({ 
   _id, amount, category, date, title, type, showActions
 }: ItemTransactionProps) => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const { deleteTransaction } = useTransactionsStore()
 
   return (
@@ -27,8 +30,8 @@ export const ItemTransaction = ({
           {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(amount)}
         </span>
       </ItemTDTable>
-      <ItemTDTable>{category}</ItemTDTable>
-      <ItemTDTable>{new Date(date).toLocaleDateString('pt-BR')}</ItemTDTable>
+      {!isMobile && <ItemTDTable>{category}</ItemTDTable>}
+      <ItemTDTable>{formatDate(new Date(date), "dd MMM, yyyy")}</ItemTDTable>
       {showActions && (
       <ItemTDTable>
         <button onClick={() => deleteTransaction(_id)} type="button">

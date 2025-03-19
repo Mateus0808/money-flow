@@ -75,7 +75,7 @@ export default function TransactionsPage () {
 
       <div className="space-y-4 rounded-lg bg-white dark:bg-cardDark p-4 mt-8">
         <div className="w-44 flex float-end mb-3">
-          <Button label="Nova Transação" onClick={handleNewTransactionModal} />
+          <Button label="Nova Transação" onClick={handleNewTransactionModal} isLoading={false} />
         </div>
         <TransactionModal
           isOpen={isNewTransactionOpen}
@@ -85,7 +85,7 @@ export default function TransactionsPage () {
           ? <LoadingTable /> 
           : (
             <>
-              <div className="w-full overflow-x-auto">
+              <div className="w-full">
                 <TransactionsTable transactions={paginatedTransactions || []} showActions={true} /> 
               </div>
               <PaginationControls 

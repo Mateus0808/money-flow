@@ -6,6 +6,7 @@ export const formatDate = (
   formatString: string = "dd 'de' MMMM' às ' HH:mm'h'",
 ) => {
   const parsedDate = typeof date === 'string' ? parseISO(date) : new Date(date);
+  console.log('parsedDate', parsedDate, date)
   if (!isValid(parsedDate)) {
     throw new Error('Data inválida');
   }

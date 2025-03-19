@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
-    const token = req.cookies.get("ftoken")?.value;
+    const token = req.cookies.get("mfToken")?.value;
 
     if (!token) {
       return NextResponse.json({ message: "Não autenticado" }, { status: 401 });

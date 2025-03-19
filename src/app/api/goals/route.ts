@@ -100,7 +100,6 @@ export async function GET(req: NextRequest) {
       },
     }, { status: 200 });
   } catch (error) {
-    console.log("Erro ao listar metas:", error);
     return NextResponse.json({ message: "Erro interno no servidor" }, { status: 500 });
   }
 }

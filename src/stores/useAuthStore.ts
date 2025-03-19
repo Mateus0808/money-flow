@@ -1,3 +1,4 @@
+import { QueryClient } from "@tanstack/react-query";
 import { create } from "zustand";
 
 interface User {
@@ -15,7 +16,7 @@ interface AuthStore {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<LoginResponse>;
-  logout: () => Promise<void>;
+  logout: (queryClient: QueryClient) => Promise<void>;
   checkAuth: () => Promise<void>;
 }
 
@@ -38,7 +39,6 @@ export const useAuthStore = create<AuthStore>((
     const data = await response.json();
 
     if (response.ok) {
-      document.cookie = `ftoken=${data.token}; path=/; Secure; HttpOnly`;
       set({ user: data.user, loading: false });
       return {
         message: data.message,
@@ -52,9 +52,13 @@ export const useAuthStore = create<AuthStore>((
     }
   },
 
-  logout: async () => {
+  logout: async (queryClient: QueryClient) => {
     set({ loading: true })
+
     await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+
+    queryClient.removeQueries();
+
     set({ user: null, loading: false });
   },
 

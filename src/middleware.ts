@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import jwt from "jsonwebtoken"; 
 
 export async function middleware(req: NextRequest) {
-  const token = req.cookies.get("ftoken")?.value;
+  const token = req.cookies.get("mfToken")?.value || "";
   const protectedRoutes = ["/home", "/dashboard", "/transactions", "/metas", "/settings", "/reports"];
 
   if (protectedRoutes.includes(req.nextUrl.pathname)) {
@@ -11,7 +11,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
     const isValid = await validateToken(token);
-    console.log("isvalid", isValid, token)
+
     if (!isValid) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
@@ -27,17 +27,18 @@ async function validateToken(token: string): Promise<boolean> {
       return false;
     }
 
-    if (decoded.exp && Date.now() >= decoded.exp * 1000) {
+    if ("exp" in decoded && decoded.exp && Date.now() >= decoded.exp * 1000) {
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error("Erro ao validar token:", error);
     return false;
   }
 }
 
 export const config = {
-  matcher: ["/home", "/dashboard", "/transactions", "/metas", "/settings", "/reports"],
+  matcher: [
+    "/home/:path*", "/dashboard/:path*", "/transactions/:path*", 
+    "/metas/:path*", "/settings/:path*", "/reports/:path*"],
 };

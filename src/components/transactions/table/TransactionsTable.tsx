@@ -18,7 +18,7 @@ export const TransactionsTable = ({ transactions, showActions = false }: Transac
   }
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full">
       <table className="w-full bg-white dark:bg-cardDark min-w-[350px]">
         <thead className="bg-inherit">
           <HeaderTable showActions={showActions} />

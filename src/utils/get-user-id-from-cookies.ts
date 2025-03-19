@@ -4,5 +4,7 @@ export const getUserIdFromCookies = async (): Promise<string> => {
   const cookieStore = await cookies();
   const userId = cookieStore.get("moneyId")?.value;
 
-  return userId || "";
+  if (!userId) throw new Error('Usuário não encontrado')
+    
+  return userId;
 };

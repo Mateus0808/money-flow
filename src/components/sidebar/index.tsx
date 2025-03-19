@@ -10,6 +10,7 @@ import { Currency, LayoutDashboard, Settings, FileText, LogOut, Goal, Home } fro
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTheme } from "@/hooks/useTheme";
+import { useQueryClient } from "@tanstack/react-query";
 
 const menuItems = [
   { name: "Home", icon: <Home size={24} />, path: "/home" },
@@ -21,6 +22,7 @@ const menuItems = [
 ];
 
 export default function Sidebar() {
+  const queryClient = useQueryClient()
   const { theme, setTheme } = useTheme()
   const { logout } = useAuthStore()
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -34,7 +36,8 @@ export default function Sidebar() {
   if (!mounted) return null; 
 
   const handleLogout = async () => {
-    await logout()
+    await logout(queryClient)
+
     router.push('/login')
   }
 

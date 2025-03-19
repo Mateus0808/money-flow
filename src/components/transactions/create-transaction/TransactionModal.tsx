@@ -19,7 +19,7 @@ interface CreateTransactionType {
 
 export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => {
   const queryClient = useQueryClient();
-  const createTransaction = useTransactionsStore((state) => state.createTransaction)
+  const { createTransaction, loading } = useTransactionsStore()
 
   const [name, setName] = useState("")
   const [amount, setAmount] = useState<number | "">("")
@@ -110,7 +110,7 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
               Cancelar
             </button>
             <div className="w-1/2 h-14">
-              <Button label="Salvar" type="submit"/>
+              <Button label="Salvar" type="submit" isLoading={loading} />
             </div>
           </div>
         </form>

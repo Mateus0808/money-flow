@@ -76,10 +76,8 @@ export const fetchTransactions =  async (
     }
 
     const result = await res.json();
-    console.log("result tran", result)
     return result;
   } catch (error) {
-    console.error("Erro ao buscar transações:", error);
     return {
       transactions: [],
       pagination: {
