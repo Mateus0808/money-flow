@@ -1,6 +1,10 @@
-import { useTransactionsStore } from "@/stores/useTransactionsStore"
 import { XCircle } from "lucide-react"
 import { ChangeEvent, useEffect, useState } from "react"
+import { useFiltersStore } from "@/stores/useFiltersStore"
+import { TransactionCategories } from "../../shared/TransactionCategories"
+import { DateRangeFilter } from "./DateRangeField"
+import { Button } from "@/components/ui/Button"
+import { ITransactionFilters } from "@/types/filters"
 
 const categories = [
   "Trabalho",
@@ -21,11 +25,14 @@ const categories = [
 
 interface DashboardFiltersProps {
   toggleFiltersPanel: () => void
+  filters: ITransactionFilters
+  setFilters: (value: ITransactionFilters) => void
+  isDashboard?: boolean
 }
 
-export const DashboardFilters = ({ toggleFiltersPanel }: DashboardFiltersProps) => {
-  const { filters, setFilters } = useTransactionsStore();
-
+export const DashboardFilters = ({ 
+  toggleFiltersPanel, filters, setFilters, isDashboard
+}: DashboardFiltersProps) => {
   const [dateRange, setDateRange] = useState<{ dateFrom: string; dateTo: string }>({
     dateFrom: "",
     dateTo: ""
@@ -39,7 +46,7 @@ export const DashboardFilters = ({ toggleFiltersPanel }: DashboardFiltersProps) 
     setDateRange((prev) => {
       const updatedRange = { ...prev, [name]: value };
       if (updatedRange.dateFrom && updatedRange.dateTo && updatedRange.dateTo < updatedRange.dateFrom) {
-        alert("A data final não pode ser menor que a data inicial!");
+        // alert("A data final não pode ser menor que a data inicial!");
         return prev;
       }
 
@@ -116,49 +123,35 @@ export const DashboardFilters = ({ toggleFiltersPanel }: DashboardFiltersProps) 
       <div className="mt-4 flex flex-col justify-start">
         <span className="text-gray-500 font-bold flex items-start">Intervalo de datas</span>
         <div className="grid grid-cols-2 gap-4 mt-1">
-          <div className="flex flex-col gap-1 w-full">
-            <label htmlFor="dateFrom" className="text-sm w-full dark:text-textLight flex items-start">De:</label>
-            <input
-              type="date"
-              name="dateFrom"
-              value={dateRange.dateFrom}
-              onChange={handleDateRange}
-              className="w-full border-2 border-gray-300 dark:border-gray-500 rounded-lg p-2 dark:text-textLight dark:bg-transparent"
-            />
-          </div>
-          <div className="flex flex-col gap-1 w-full">
-            <label htmlFor="dateTo" className="text-sm w-full dark:text-textLight flex items-start">Até:</label>
-            <input
-              type="date"
-              name="dateTo"
-              value={dateRange.dateTo}
-              onChange={handleDateRange}
-              className="w-full border-2 border-gray-300 dark:border-gray-500 rounded-lg p-2 dark:text-textLight dark:bg-transparent"
-            />
-          </div>
+          <DateRangeFilter 
+            label="De:"
+            date={dateRange.dateFrom}
+            handleDateRange={handleDateRange}
+            name="dateFrom"
+          />
+          <DateRangeFilter 
+            label="Até:"
+            date={dateRange.dateTo}
+            handleDateRange={handleDateRange}
+            name="dateTo"
+          />
         </div>
       </div>
       <div className="mt-6 w-full">
         <span className="text-gray-500 font-bold flex items-start">Categoria</span>
         <div className="grid grid-cols-1 mt-2">
-          <select 
-            className="w-full h-11 border-2 border-gray-300 dark:border-gray-500 rounded-lg p-2 dark:text-textLight dark:bg-cardDark"
-            value={selectedCategory} 
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            disabled={!!selectedType}
-          >
-            <option value="">...</option>
-            {categories.map(category => (
-              <option value={category} key={category}>{category}</option>
-            ))}
-          </select>
+          <TransactionCategories 
+            disabled={!!selectedType} 
+            category={selectedCategory} 
+            setCategory={setSelectedCategory} 
+          />
         </div>
       </div>
       <div className="mt-6 w-full">
         <span className="text-gray-500 font-bold flex items-start">Tipo de transação</span>
         <div className="grid grid-cols-1 mt-2">
           <select 
-            className="w-full h-11 border-2 border-gray-300 dark:border-gray-500 rounded-lg p-2 dark:text-textLight dark:bg-cardDark"
+            className="w-full dark:text-textLight dark:bg-cardDark placeholder:text-white h-12 border-2 dark:border-gray-700 border-gray-300 rounded-lg py-2 px-4 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={selectedType ?? ""} 
             onChange={(e) => handleTypeChange(e)}
             disabled={!!selectedCategory}
@@ -166,7 +159,7 @@ export const DashboardFilters = ({ toggleFiltersPanel }: DashboardFiltersProps) 
             <option value="">...</option>
             <option value="deposit">Entradas</option>
             <option value="withdraw">Saídas</option>
-            <option value="total">Total</option>
+            {isDashboard && <option value="total">Total</option>}
           </select>
         </div>
         <div className="mt-6 w-full flex justify-between gap-4">
@@ -176,11 +169,7 @@ export const DashboardFilters = ({ toggleFiltersPanel }: DashboardFiltersProps) 
             className="dark:text-textLight dark:bg-gray-700 px-4 py-2 rounded-lg bg-gray-300 text-gray-700 flex gap-2 items-center hover:opacity-80">
             Limpar
           </button>
-          <button 
-            onClick={applyFilters} 
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
-            Aplicar
-          </button>
+          <Button label="Aplicar" onClick={applyFilters} />
         </div>
       </div>
     </div>

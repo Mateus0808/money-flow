@@ -2,8 +2,9 @@
 import Image from "next/image"
 import { SignInPageUI } from "./page-ui";
 import { useState } from "react";
-import { useAuthStore } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { errorNotify } from "@/libs/notify/notify";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function SignInPage() {
   const router = useRouter()
@@ -14,9 +15,13 @@ export default function SignInPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await login(email, password)
-    router.push('/home')
-  };
+    const { message, success } = await login(email, password)
+    if (success) {
+      router.push('/home')
+    } else {
+      errorNotify(message)
+    }
+  }
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">

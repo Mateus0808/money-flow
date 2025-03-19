@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { TextareaHTMLAttributes } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
@@ -16,7 +17,11 @@ export const TextAreaField = ({ label, register, error }: TextAreaFieldProps) =>
       <textarea
         id={register.name}
         {...register}
-        className="dark:bg-transparent dark:text-textLight mt-1 block w-full px-3 py-2 border-2 dark:border-gray-700 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        className={clsx(
+          'rounded-md shadow-sm mt-1 block w-full px-3 py-2 border-2 border-gray-300', 
+          'text-gray-700 dark:border-gray-700 dark:text-textLight dark:bg-transparent',
+          'focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500'
+        )}
       />
       {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>

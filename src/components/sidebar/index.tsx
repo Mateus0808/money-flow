@@ -1,14 +1,15 @@
 "use client";
 
-import { Currency, LayoutDashboard, Settings, FileText, LogOut, Goal, Home } from "lucide-react";
-import Link from "next/link"
-import { useAuthStore } from "@/hooks/useAuth";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { useTheme } from "@/hooks/useTheme";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
+import Link from "next/link"
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Currency, LayoutDashboard, Settings, FileText, LogOut, Goal, Home } from "lucide-react";
+
+import { useAuthStore } from "@/stores/useAuthStore";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useTheme } from "@/hooks/useTheme";
 
 const menuItems = [
   { name: "Home", icon: <Home size={24} />, path: "/home" },

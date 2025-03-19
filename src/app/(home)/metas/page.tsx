@@ -11,16 +11,20 @@ import { GoalCard } from "@/components/goal/GoalCard";
 import { FiltersGoal } from "@/components/goal/FiltersGoal";
 
 import LoadingGoals from "./loading";
+import { NoChartData } from "@/components/shared/NoChartData";
+import { useGoalStore } from "@/stores/useGoalStore";
 
 
 export default function ListGoalsPage() {
+  const { pagination, setPagination, deleteGoal } = useGoalStore()
+
   const [priority, setPriority] = useState("");
   const [month, setMonth] = useState<string>("");
   const [year, setYear] = useState<string>("");
   
-  const { goals, loading, pagination, setPagination, deleteGoal } = useGoals({ 
-    priority, month, year
-  })
+  const { data, isFetching } = useGoals({ priority, month, year, pagination })
+
+  if (isFetching) return <LoadingGoals />
 
   return (
     <div className="min-h-screen">
@@ -47,14 +51,19 @@ export default function ListGoalsPage() {
         </Link>
       </div>
 
-      { loading ? <LoadingGoals /> : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {goals && goals?.map((goal, index) => (
-            <GoalCard key={index} goal={goal} deleteGoal={deleteGoal} />
-          ))}
-      </div>
-      ) }
-      <PaginationControls pagination={pagination} setPagination={setPagination} />
+      {data?.goals.length === 0 
+        ? <NoChartData label="🔍 Nenhum objetivo disponível"/> 
+        : (
+          <>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {data?.goals && data?.goals?.map((goal, index) => (
+                <GoalCard key={index} goal={goal} deleteGoal={deleteGoal} />
+              ))}
+            </div>
+            <PaginationControls pagination={data?.pagination || pagination} setPagination={setPagination} />
+          </>
+        )
+      }
     </div>
   );
 }

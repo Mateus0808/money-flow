@@ -13,7 +13,7 @@ export const RadioBox = ({ activeColor, imagePath, title, isActive, ...rest }: R
   return (
     <button
       type="button"
-      className={`h-14 border-[1px] border-solid border-[#d7d7d7] flex items-center justify-center gap-4
+      className={`h-14 border-[1px] border-solid flex items-center justify-center gap-4
         transition-colors duration-200 rounded-lg`
       }
       style={{

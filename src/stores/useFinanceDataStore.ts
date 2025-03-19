@@ -1,13 +1,24 @@
 import { 
   getCategories, getExpensesByCategory, getIncomesAndExpenses, getMonthlyData 
 } from '@/services/transaction.service';
-import { TransactionType } from '@/types/TransactionType';
+import { TransactionType } from '@/types/transaction-type';
 
 export const useFinanceDataStore = (
-  transactions: TransactionType[], 
+  transactions?: TransactionType[], 
   type?: "deposit" | "withdraw" | "total" | "",
   category?: string
 ) => {
+  if (!transactions?.length) {
+    return {
+      radarChartData: [],
+      chartBarData: [],
+      fiveOutcomeCharData: [],
+      annualMonthlyBalanceData: { labels: [], datasets: {} },
+      expensesByCategory: {},
+      incomeExpenseData: { labels: [], datasets: {} }
+    }
+  }
+
   let filteredTransactions = transactions;
 
   if (type && type !== "total") {

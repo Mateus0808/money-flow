@@ -1,11 +1,7 @@
 import { create } from "zustand";
-import { GoalTypeResponse } from "@/types/GoalType";
-import { PaginationType } from "@/types/TransactionType";
+import { GoalTypeResponse, IGoalType } from "@/types/goal-type";
+import { PaginationType } from "@/types/pagination";
 
-interface GoalsResponse {
-  goals: GoalTypeResponse[];
-  pagination: PaginationType
-}
 
 interface GoalStore {
   goals: GoalTypeResponse[]
@@ -14,8 +10,9 @@ interface GoalStore {
   setLoading: (loading: boolean) => void
   pagination: PaginationType;
   setPagination: (pagination: PaginationType) => void;
-  fetchGoals: (params?: { month?: string; year?: string; priority?: string }) => Promise<void>;
+  // fetchGoals: (params?: { month?: string; year?: string; priority?: string }) => Promise<void>;
   deleteGoal: (id: string) => Promise<void>;
+  createGoal: (goal: IGoalType) => Promise<void>
 }
 
 export const useGoalStore = create<GoalStore>((set, get) => ({
@@ -33,44 +30,72 @@ export const useGoalStore = create<GoalStore>((set, get) => ({
     const goal = await fetch(`/api/goals?id=${id}`, {
       method: "DELETE"
     })
-    if (!goal.ok) throw new Error("Erro ao deletar a meta");
+    if (!goal.ok) throw new Error("Erro ao deletar a meta financeira");
 
     set((state) => ({
       goals: state.goals.filter((goal) => goal._id !== id),
       loading: false,
     }));
-    alert("Meta deletada com sucesso")
   },
 
-  fetchGoals: async ({ month, year, priority } = {}) => {
+  createGoal: async (goalRequest: IGoalType) => {
     set({ loading: true });
-    try {
-      if (month && !year) {
-        set({ loading: false });
-        return;
-      }
 
-      const { pagination } = get();
-      const url = new URL('/api/goals', window.location.origin);
+    const res = await fetch("/api/goals", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(goalRequest),
+    });
+  
+    if (!res.ok) throw new Error("Erro ao criar objetivo");
+    
+    const goal = await res.json();
 
-      url.searchParams.set('page', pagination.page.toString());
-      url.searchParams.set('limit', pagination.limit.toString());
+    set((state) => {
+      const newGoals = [goal, ...state.goals];
+      return {
+        goals: newGoals.slice(0, state.pagination.limit),
+        pagination: updatePagination(state.pagination),
+        loading: false
+      };
+    });
+  }
 
-      if (priority) url.searchParams.set('priority', priority);
-      if (year) {
-        const deadlineFilter = month ? `${year}-${month}` : `${year}`;
-        url.searchParams.set('deadline', deadlineFilter);
-      }
+  // fetchGoals: async ({ month, year, priority } = {}) => {
+  //   set({ loading: true });
+  //   try {
+  //     if (month && !year) {
+  //       set({ loading: false });
+  //       return;
+  //     }
 
-      const response = await fetch(url.toString());
-      if (!response.ok) throw new Error('Erro ao buscar metas');
+  //     const { pagination } = get();
+  //     const url = new URL('/api/goals', window.location.origin);
 
-      const result = await response.json() as GoalsResponse;
-      set({ goals: result.goals, pagination: result.pagination });
-    } catch (err) {
-      console.error("Erro ao buscar metas:", err);
-    } finally {
-      set({ loading: false });
-    }
-  },
+  //     url.searchParams.set('page', pagination.page.toString());
+  //     url.searchParams.set('limit', pagination.limit.toString());
+
+  //     if (priority) url.searchParams.set('priority', priority);
+  //     if (year) {
+  //       const deadlineFilter = month ? `${year}-${month}` : `${year}`;
+  //       url.searchParams.set('deadline', deadlineFilter);
+  //     }
+
+  //     const response = await fetch(url.toString());
+  //     if (!response.ok) throw new Error('Erro ao buscar metas');
+
+  //     const result = await response.json() as GoalsResponse;
+  //     set({ goals: result.goals, pagination: result.pagination });
+  //   } catch (err) {
+  //     console.error("Erro ao buscar metas:", err);
+  //   } finally {
+  //     set({ loading: false });
+  //   }
+  // },
 }))
+
+const updatePagination = (pagination: PaginationType) => ({
+  ...pagination,
+  page: 1,
+  totalPages: Math.ceil((pagination.totalPages * pagination.limit + 1) / pagination.limit),
+});

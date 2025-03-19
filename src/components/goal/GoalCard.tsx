@@ -9,11 +9,9 @@ import {
   Trash2, 
   DollarSign
 } from "lucide-react";
+import Link from "next/link";
 import { Tooltip } from "../ui/Tooltip";
 import { EnumGoalPriority, GoalTypeResponse } from "@/types/goal-type";
-import Link from "next/link";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { errorNotify, successNotify } from "@/libs/notify/notify";
 import { useGenericMutation } from "@/hooks/useGenericMutation";
 
 
@@ -35,8 +33,6 @@ type GoalCardProps = {
 }
 
 export const GoalCard = ({ goal, deleteGoal }: GoalCardProps) => {
-  const queryClient = useQueryClient();
-
   const progress = Math.ceil((goal.initialAmount * 100) / goal.targetAmount)
 
   const deleteGoalMutation = useGenericMutation({

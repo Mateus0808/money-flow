@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { TransactionType } from "@/types/TransactionType";
+import { TransactionType } from "@/types/transaction-type";
 import { SummaryCard } from "@/components/home/SummaryCard";
 
 type SummaryProps = {

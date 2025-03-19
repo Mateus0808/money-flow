@@ -1,4 +1,5 @@
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { NoChartData } from "../shared/NoChartData";
 
 interface BalanceLineChartProps {
   data: {
@@ -12,6 +13,14 @@ interface BalanceLineChartProps {
 }
 
 export const BalanceLineChart = ({ data }: BalanceLineChartProps) => {
+  if (data.length === 0) {
+    return (
+      <div className="h-[342px]">
+        <NoChartData label="🔍 Nenhum dado disponível para os períodos selecionados."/>  
+      </div>
+    )
+  }
+
   return (
     <ResponsiveContainer width="100%" height={342}>
       <LineChart data={data}

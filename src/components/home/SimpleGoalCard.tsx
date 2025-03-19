@@ -1,4 +1,4 @@
-import { EnumGoalPriority, GoalTypeResponse } from "@/types/GoalType"
+import { EnumGoalPriority, GoalTypeResponse } from "@/types/goal-type"
 import { Tooltip } from "../ui/Tooltip"
 import { AlertCircle, CheckCircle, XCircle } from "lucide-react"
 

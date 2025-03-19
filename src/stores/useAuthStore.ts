@@ -6,10 +6,15 @@ interface User {
   name: string;
 }
 
+interface LoginResponse {
+  message: string
+  success: boolean
+}
+
 interface AuthStore {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<LoginResponse>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
 }
@@ -29,13 +34,21 @@ export const useAuthStore = create<AuthStore>((
       body: JSON.stringify({ email, password }),
       credentials: "include",
     });
+    
+    const data = await response.json();
 
     if (response.ok) {
-      const data = await response.json();
       document.cookie = `ftoken=${data.token}; path=/; Secure; HttpOnly`;
       set({ user: data.user, loading: false });
+      return {
+        message: data.message,
+        success: true
+      }
     } else {
-      throw new Error("Credenciais inválidas");
+      return {
+        message: data.message,
+        success: false
+      }
     }
   },
 

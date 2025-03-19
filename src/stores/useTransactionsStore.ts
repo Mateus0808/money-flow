@@ -1,7 +1,8 @@
 import { create } from "zustand";
-import { PaginationType, TransactionType } from "@/types/TransactionType";
+import { TransactionType } from "@/types/transaction-type";
+import { PaginationType } from "@/types/pagination";
 
-type TransactionRequest = Omit<TransactionType, "_id" | "date">;
+type TransactionRequest = Omit<TransactionType, "_id" | "date" | "userId">;
 
 interface TransactionFilters {
   startDate?: string;
@@ -82,6 +83,7 @@ export const useTransactionsStore = create<TransactionsStore>((set, get) => ({
       }
 
       const transaction = await res.json();
+      console.log("my transaction", transaction)
       set((state) => {
         const newTransactions = [transaction, ...state.transactions];
         return {

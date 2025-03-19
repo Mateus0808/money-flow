@@ -1,6 +1,7 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema, Types } from "mongoose";
 
 export interface IGoal extends Document {
+  userId: Types.ObjectId
   goalName: string;
   goalType: string;
   targetAmount: number;
@@ -14,6 +15,7 @@ export interface IGoal extends Document {
 }
 
 const GoalSchema = new Schema<IGoal>({
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   goalName: { type: String, required: true },
   goalType: { type: String, required: true },
   targetAmount: { type: Number, required: true },

@@ -3,11 +3,12 @@
 import { use, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-import { GoalTypeResponse } from "@/types/GoalType";
+import { GoalTypeResponse } from "@/types/goal-type";
 import { goalSchema } from "@/libs/validation/goalSchema";
 
 import { FormGoal } from "@/components/goal/FormGoal";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 
 export default function EditGoal({ params }: { params: Promise<{ id: string }> }) {
@@ -18,7 +19,8 @@ export default function EditGoal({ params }: { params: Promise<{ id: string }> }
     handleSubmit,
     watch,
     reset,
-    formState: { errors },
+    control,
+    formState: { errors, isLoading },
   } = useForm({
     resolver: zodResolver(goalSchema),
   });
@@ -57,11 +59,9 @@ export default function EditGoal({ params }: { params: Promise<{ id: string }> }
 
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-center">
-      <div className="max-w-2xl bg-white p-6 rounded-lg shadow-md w-full">
-        <h2 className="w-full flex justify-center items-center text-xl font-semibold mb-4">
-          Editar Meta
-        </h2>
+    <div className="min-h-screen rounded-lg flex flex-col justify-center items-center">
+      <div className="max-w-2xl bg-white dark:bg-cardDark p-6 rounded-lg shadow-md w-full">
+        <h1 className="text-2xl flex justify-center font-bold mb-6 dark:text-textLight">Editar Meta Financeira</h1>
 
         <FormGoal
           handleSubmit={handleSubmit}
@@ -69,6 +69,9 @@ export default function EditGoal({ params }: { params: Promise<{ id: string }> }
           onSubmit={onSubmit}
           showContributionField={showContributionField}
           errors={errors}
+          isLoading={isLoading}
+          type="EDIT"
+          control={control}
         />
       </div>
     </div>

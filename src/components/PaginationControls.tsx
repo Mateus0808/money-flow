@@ -1,4 +1,4 @@
-import { PaginationType } from "@/types/TransactionType";
+import { PaginationType } from "@/types/pagination";
 
 interface PaginationProps {
   pagination: PaginationType

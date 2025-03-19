@@ -18,14 +18,21 @@ export async function POST(req: NextRequest) {
     }
     const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json({ message: 'Email ou senha incorreto' }, { status: 401 });
+      return NextResponse.json({ message: 'Credencias inválidas' }, { status: 401 });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return NextResponse.json(
-        { message: "Email ou senha incorreto" },
+        { message: "Credencias inválidas" },
         { status: 401 }
+      );
+    }
+
+    if (!process.env.JWT_SECRET) {
+      return NextResponse.json(
+        { message: "Erro interno no servidor" },
+        { status: 500 }
       );
     }
 
@@ -36,10 +43,16 @@ export async function POST(req: NextRequest) {
     );
     
     const response = NextResponse.json(
-      { user, message: "Login realizado com sucesso" },
+      { 
+        user: { 
+          id: user._id, email: user.email, name: user.nama 
+        }, 
+        message: "Login realizado com sucesso" 
+      },
       { status: 200 }
     );
-    response.headers.set("Set-Cookie", `ftoken=${token}; Path=/; HttpOnly; Secure; SameSite=Strict`);
+    response.headers.set("Set-Cookie", `ftoken=${token}; Path=/; HttpOnly; Secure; SameSite=Lax`);
+    response.headers.set("Set-Cookie", `moneyId=${user._id}; Path=/; HttpOnly; Secure; SameSite=Lax`);
 
     return response
   } catch (error) {

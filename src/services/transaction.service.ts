@@ -1,6 +1,11 @@
-import { TransactionType } from "@/types/TransactionType";
+import Cookies from 'js-cookie';
+import { TransactionType, TransactionTypePagination } from "@/types/transaction-type";
 
 export const getCategories = (transactions: TransactionType[]) => {
+  if (!transactions || !Array.isArray(transactions)) {
+    return [];
+  }
+
   const categories = [...new Set(transactions.filter((
       transaction
     ) => transaction).map((transaction) => transaction.category))
@@ -50,3 +55,39 @@ export const getMonthlyData = (transactions: TransactionType[], type?: "deposit"
 
   return { monthlyExpenses, monthlyIncomes, total };
 };
+
+export const fetchTransactions =  async (
+  page?: number, limit?: string, filters?: {}
+): Promise<TransactionTypePagination> => {
+  try {
+    const url = new URL('/api/transactions', window.location.origin);
+    url.searchParams.set("limit", limit ?? '10');
+
+    if (page) url.searchParams.set("page", page.toString() ?? '1');
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== 'total' && !!value) url.searchParams.set(key, value.toString());
+      });
+    }
+
+    const res = await fetch(url.toString());
+    if (!res.ok) {
+      throw new Error("Falha ao buscar transações");
+    }
+
+    const result = await res.json();
+    console.log("result tran", result)
+    return result;
+  } catch (error) {
+    console.error("Erro ao buscar transações:", error);
+    return {
+      transactions: [],
+      pagination: {
+        limit: 10,
+        page: 1,
+        total: 0,
+        totalPages: 1
+      }
+    }
+  }
+}

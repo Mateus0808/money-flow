@@ -1,29 +1,53 @@
 import { useState } from "react"
 import { RadioBox } from "./RadioBox"
 import { useTransactionsStore } from "@/stores/useTransactionsStore"
+import { TransactionCategories } from "@/components/shared/TransactionCategories"
+import { Button } from "@/components/ui/Button"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 interface TransactionModalProps {
   isOpen: boolean
   onClose: () => void
-  categories: string[]
 }
 
-export const TransactionModal = ({ isOpen, onClose, categories }: TransactionModalProps) => {
+interface CreateTransactionType {
+  type: "deposit" | "withdraw"
+  category: string
+  amount: number
+  title: string
+}
+
+export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => {
+  const queryClient = useQueryClient();
   const createTransaction = useTransactionsStore((state) => state.createTransaction)
 
   const [name, setName] = useState("")
   const [amount, setAmount] = useState<number | "">("")
-  const [category, setCategory] = useState(categories[0] || "")
+  const [category, setCategory] = useState("")
   const [type, setType] = useState<'deposit' | 'withdraw'>('deposit')
 
-  const handleSubmit = async () => {
-    if (!name || amount === "" || !category) return
-    await createTransaction({ title: name, amount, category, type })
-    setName("")
-    setAmount("")
-    setCategory(categories[0] || "")
-    setType(type)
-    onClose()
+  const mutation = useMutation({
+    mutationFn: (newTransaction: CreateTransactionType) => createTransaction(newTransaction),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      onClose();
+    },
+    onError: (error) => {
+      console.error('Erro ao criar transação:', error);
+    },
+  });
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!name || amount === "" || !category || !type) return
+
+    const newTransaction = {
+      title: name,
+      amount: Number(amount),
+      category,
+      type,
+    };
+    mutation.mutate(newTransaction)
   }
 
   if (!isOpen) return null
@@ -33,7 +57,7 @@ export const TransactionModal = ({ isOpen, onClose, categories }: TransactionMod
       <div className="bg-white dark:bg-cardDark rounded-lg shadow-lg p-8 w-full max-w-lg">
         <h2 className="text-xl dark:text-textLight font-semibold mb-4">Nova Transação</h2>
 
-        <div className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-textLight">Nome</label>
             <input
@@ -58,17 +82,7 @@ export const TransactionModal = ({ isOpen, onClose, categories }: TransactionMod
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-textLight">Categoria</label>
-            <select
-              className="w-full dark:text-textLight dark:bg-transparent placeholder:text-white h-14 border-2 dark:border-gray-700 border-gray-300 rounded-lg py-2 px-4 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              {categories.map((cat, index) => (
-                <option key={index} value={cat} className="dark:text-white dark:bg-cardDark">
-                  {cat}
-                </option>
-              ))}
-            </select>
+            <TransactionCategories category={category} setCategory={setCategory} />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -88,22 +102,19 @@ export const TransactionModal = ({ isOpen, onClose, categories }: TransactionMod
               imagePath="/outcome.svg"
             />
           </div>
-        </div>
+          <div className="flex w-full justify-end space-x-4 mt-8">
+            <button
+              className="w-1/2 px-4 py-2 h-14 bg-gray-300 rounded-lg text-gray-700 hover:bg-gray-400"
+              onClick={onClose}
+            >
+              Cancelar
+            </button>
+            <div className="w-1/2 h-14">
+              <Button label="Salvar" type="submit"/>
+            </div>
+          </div>
+        </form>
 
-        <div className="flex w-full justify-end space-x-4 mt-8">
-          <button
-            className="w-1/2 px-4 py-2 h-14 bg-gray-300 rounded-lg text-gray-700 hover:bg-gray-400"
-            onClick={onClose}
-          >
-            Cancelar
-          </button>
-          <button
-            className="w-1/2 px-4 h-14 py-2 bg-primary text-white rounded-lg hover:bg-blue-700"
-            onClick={handleSubmit}
-          >
-            Salvar
-          </button>
-        </div>
       </div>
     </div>
   )

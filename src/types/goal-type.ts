@@ -1,3 +1,5 @@
+import { PaginationType } from "./pagination"
+
 export enum EnumGoalPriority {
   LOW = 'Baixa',
   MEDIUM = 'Média',
@@ -18,5 +20,11 @@ export interface IGoalType {
 }
   
 export interface GoalTypeResponse extends IGoalType {
+  userId: string
   _id: string
+}
+
+export interface GoalsResponse {
+  goals: GoalTypeResponse[];
+  pagination: PaginationType
 }

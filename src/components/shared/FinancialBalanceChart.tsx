@@ -1,6 +1,7 @@
 import { 
   Bar, BarChart, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis 
 } from "recharts";
+import { NoChartData } from "./NoChartData";
 
 interface FinancialBalanceChartProps {
   data: {
@@ -38,6 +39,14 @@ export const FinancialBalanceChart = ({ data, type = undefined, category }: Fina
     barColor: getTotalBarColor(entry.total),
   }));
 
+  if (updatedData.length === 0) {
+    return (
+      <div className="h-[342px]">
+        <NoChartData  label="🔍 Nenhum dado disponível para os períodos selecionados."/>  
+      </div>
+    )
+  }
+  
   return (
     <ResponsiveContainer width="100%" height={342}>
       <BarChart data={updatedData}>

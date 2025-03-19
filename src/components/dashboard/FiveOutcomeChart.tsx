@@ -1,7 +1,7 @@
-import { useFinanceDataStore } from "@/hooks/useFinanceData";
 import { 
   Bar, BarChart, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis 
 } from "recharts";
+import { NoChartData } from "../shared/NoChartData";
 
 interface FiveOutcomeChartProps {
   data: {
@@ -12,6 +12,14 @@ interface FiveOutcomeChartProps {
 
 export const FiveOutcomeChart = ({ data }: FiveOutcomeChartProps) => {
   const colors = ["#FF4D4D", "#FF9800", "#FF6B6B", "#FF5252", "#E91E63"];
+
+  if (data.length === 0) {
+    return (
+      <div className="h-[342px]">
+        <NoChartData label="🔍 Nenhum dado disponível para os períodos selecionados."/>  
+      </div>
+    )
+  }
 
   return (
     <ResponsiveContainer width="100%" height={342}>

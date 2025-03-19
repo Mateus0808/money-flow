@@ -1,6 +1,7 @@
 import { 
   Legend, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Tooltip 
 } from "recharts";
+import { NoChartData } from "./NoChartData";
 
 interface ExpenseDistributionChartProps {
   data:  {
@@ -19,6 +20,14 @@ export const ExpenseDistributionChart = ({ data, data2 }: ExpenseDistributionCha
     value1: item.value,
     value2: data2 ? data2[index]?.value ?? 0 : 0
   }));
+
+  if (mergedData.length === 0) {
+    return (
+      <div className="h-[342px]">
+        <NoChartData  label="🔍 Nenhum dado disponível para os períodos selecionados."/>   
+      </div>
+    )
+  }
 
   return (
     <ResponsiveContainer width="100%" height={342}>

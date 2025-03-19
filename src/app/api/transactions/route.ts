@@ -1,20 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/libs/mongodb";
 import Transaction from "@/models/Transaction";
+import { getUserIdFromCookies } from "@/utils/get-user-id-from-cookies";
+import { setEndOfDay } from "@/utils/set-end-of-day";
 
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
-    const { title, amount, category, type } = await req.json();
+    const userId = await getUserIdFromCookies()
 
-    if (!title || !amount || !category || !type) {
+    const { title, amount, category, type } = await req.json();
+    console.log(title, amount, category, type, '5', userId)
+    if (!title || !amount || !category || !type || !userId) {
       return NextResponse.json(
         { message: "Todos os campos são obrigatórios" },
         { status: 400 }
       );
     }
 
-    const transaction = await Transaction.create({ title, amount, category, type });
+    const transaction = await Transaction.create({ userId, title, amount, category, type });
     return NextResponse.json(transaction, { status: 201 });
   } catch (error) {
     console.log(error)
@@ -25,6 +29,7 @@ export async function POST(req: NextRequest) {
 export async function GET(req: Request) {
   try {
     await connectDB();
+    const userId = await getUserIdFromCookies()
 
     const { searchParams } = new URL(req.url);
     
@@ -38,18 +43,15 @@ export async function GET(req: Request) {
     const category = searchParams.get("category");
     const type = searchParams.get("type") as "income" | "expense" | null;
 
-    const filter: any = {};
+    const filter: any = { userId };
 
-    if (startDate || endDate) {
+    if (startDate && endDate) {
       filter.date = {};
-      if (startDate) filter.date.$gte = new Date(startDate);
-      if (endDate) filter.date.$lte = new Date(endDate);
+      
+      const endOfDay = setEndOfDay(new Date(endDate))
+      filter.date.$gte = new Date(startDate);
+      filter.date.$lte = endOfDay;
     }
-    // else {
-    //   const thirtyDaysAgo = new Date();
-    //   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    //   filter.date = { $gte: thirtyDaysAgo };
-    // }
     if (category) filter.category = category;
     if (type) filter.type = type;
 

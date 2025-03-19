@@ -1,17 +1,27 @@
-import { IGoalType } from "@/types/GoalType";
+import { IGoalType } from "@/types/goal-type";
 import { connectDB } from "@/libs/mongodb";
 import Goal from "@/models/Goal";
 import { NextRequest, NextResponse } from "next/server";
+import { getUserIdFromCookies } from "@/utils/get-user-id-from-cookies";
 
 export async function POST(req: NextRequest) {
   try {
     await connectDB()
+    const userId = await getUserIdFromCookies()
+
     const goalData = await req.json() as IGoalType;
 
     const requiredFields: (keyof IGoalType)[] = [
       "goalName", "initialAmount", "targetAmount", "goalType",
       "priority", "deadline", "frequency"
     ];
+
+    if (!userId) {
+      return NextResponse.json(
+        { message: 'Os seguintes campos são obrigatórios: userId' },
+        { status: 400 }
+      );
+    }
 
     const missingFields = requiredFields.filter(field => !goalData[field]);
 
@@ -22,7 +32,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const goal = await Goal.create(goalData);
+    const goal = await Goal.create({ userId, ...goalData });
 
     return NextResponse.json(goal, { status: 201 });
   } catch (error) {
@@ -35,6 +45,8 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   try {
     await connectDB();
+    const userId = await getUserIdFromCookies()
+
     const url = new URL(req.url);
 
     const priority = url.searchParams.get('priority');
@@ -43,10 +55,9 @@ export async function GET(req: NextRequest) {
     const limit = Math.min(parseInt(url.searchParams.get('limit') || '8', 10), 8);
     const skip = (page - 1) * limit;
 
-    const filter: any = {};
-    if (priority) {
-      filter.priority = priority;
-    }
+    const filter: any = { userId };
+
+    if (priority) filter.priority = priority;
     if (deadline) {
       const [year, month] = deadline.split('-');
       if (year && month) {
