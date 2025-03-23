@@ -1,6 +1,9 @@
+import { enumTransactionType } from "./transaction-type";
+
 export interface ITransactionFilters {
-  startDate?: string;
-  endDate?: string;
+  startDate?: Date | null;
+  endDate?: Date | null;
   category?: string;
-  type: "deposit" | "withdraw" | "total" | "";
+  groupCategory?: string
+  type: enumTransactionType;
 }

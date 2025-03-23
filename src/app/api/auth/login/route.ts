@@ -57,7 +57,6 @@ export async function POST(req: NextRequest) {
 
     return response
   } catch (error) {
-    console.error("Erro ao autenticar usuário:", error);
     return NextResponse.json({ message: "Erro interno no servidor" }, { status: 500 });
   }
 }

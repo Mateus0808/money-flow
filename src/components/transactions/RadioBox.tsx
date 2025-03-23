@@ -1,3 +1,4 @@
+import clsx from "clsx"
 import Image from "next/image"
 import { darken, transparentize } from 'polished'
 import { ButtonHTMLAttributes } from "react"
@@ -13,13 +14,16 @@ export const RadioBox = ({ activeColor, imagePath, title, isActive, ...rest }: R
   return (
     <button
       type="button"
-      className={`h-14 border-[1px] border-solid flex items-center justify-center gap-4
-        transition-colors duration-200 rounded-lg`
-      }
+      className={clsx(
+        'h-12 border-[1px] border-solid flex items-center justify-center gap-4',
+        'transition-colors duration-200 rounded-lg',
+        isActive ? "opacity-100" : "opacity-50"
+      )}
       style={{
         backgroundColor: isActive ? transparentize(0.6, activeColor) : "transparent",
         borderColor: darken(0.1, "#d7d7d7"),
       }}
+      aria-pressed={isActive}
       {...rest}
     >
       <Image alt="Deposit" src={imagePath} height={20} width={20} />

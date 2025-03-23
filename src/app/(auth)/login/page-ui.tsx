@@ -56,7 +56,7 @@ export const SignInPageUI = ({
       </div>
 
       <div className="w-full h-12">
-        <Button label="Entrar" type="submit" isLoading={isLoading} />
+        <Button label="Entrar" type="submit" disabled={isLoading} isLoading={isLoading} />
       </div>
 
       <div className="text-md text-center">

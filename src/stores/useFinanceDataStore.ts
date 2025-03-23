@@ -1,12 +1,14 @@
 import { 
   getCategories, getExpensesByCategory, getIncomesAndExpenses, getMonthlyData 
 } from '@/services/transaction.service';
-import { TransactionType } from '@/types/transaction-type';
+import { enumTransactionType, TransactionType } from '@/types/transaction-type';
+import { reverseCategoryMapping } from '@/utils/reverse-category-mapping';
 
 export const useFinanceDataStore = (
   transactions?: TransactionType[], 
-  type?: "deposit" | "withdraw" | "total" | "",
-  category?: string
+  type?: enumTransactionType,
+  category?: string,
+  groupCategory?: string
 ) => {
   if (!transactions?.length) {
     return {
@@ -22,10 +24,16 @@ export const useFinanceDataStore = (
   let filteredTransactions = transactions;
 
   if (type && type !== "total") {
-    filteredTransactions = filteredTransactions.filter((transaction) => transaction.type === type);
+    filteredTransactions = filteredTransactions
+      .filter((transaction) => transaction.type === type);
   }
-  if (category) {
-    filteredTransactions = filteredTransactions.filter((transaction) => transaction.category === category);
+  if (category && !groupCategory) {
+    filteredTransactions = filteredTransactions
+      .filter((transaction) => transaction.category === category);
+  }
+  if (groupCategory && !category) {
+    filteredTransactions = filteredTransactions
+      .filter((transaction) => transaction.groupCategory === groupCategory);
   }
 
   const categories = getCategories(filteredTransactions);
@@ -51,7 +59,7 @@ export const useFinanceDataStore = (
   const fiveOutcomeCharData = fiveOutcomesByCategory.map(entry => {
     if (entry.amount > 0) {
       return {
-        name: entry.category,
+        name: reverseCategoryMapping[entry.category] || entry.category,
         amount: entry.amount
       };
     }
@@ -62,7 +70,7 @@ export const useFinanceDataStore = (
   const radarChartData = categories.map(category => {
     if (expensesByCategory[category] > 0) {
       return {
-        category: category,
+        category: reverseCategoryMapping[category] || category,
         value: expensesByCategory[category] || 0,
       }
     }
@@ -71,11 +79,9 @@ export const useFinanceDataStore = (
 
   const chartBarData = annualMonthlyBalanceData.labels.map((label, index) => ({
     name: label,
-    expenses: (type === "total" || type === 'deposit') ? undefined : annualMonthlyBalanceData.datasets.monthlyExpenses[index],
-    incomes: (type === "total" || type === "withdraw") || (category !== 'Trabalho' && !!category)
-      ? undefined 
-      : annualMonthlyBalanceData.datasets.monthlyIncomes[index],
-    total: (type === "total" || !!type) || !category ? total?.[index] : undefined
+    expenses: annualMonthlyBalanceData.datasets.monthlyExpenses[index],
+    incomes: annualMonthlyBalanceData.datasets.monthlyIncomes[index],
+    total: total?.[index]
   }));
 
   return { 

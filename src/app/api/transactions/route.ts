@@ -3,25 +3,34 @@ import { connectDB } from "@/libs/mongodb";
 import Transaction from "@/models/Transaction";
 import { getUserIdFromCookies } from "@/utils/get-user-id-from-cookies";
 import { setEndOfDay } from "@/utils/set-end-of-day";
+import { CreateTransactionFormData } from "@/libs/validation/transactionSchema";
 
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
     const userId = await getUserIdFromCookies()
 
-    const { title, amount, category, type } = await req.json();
-    console.log(title, amount, category, type, '5', userId)
-    if (!title || !amount || !category || !type || !userId) {
+    const { title, amount, groupCategory, type, ...rest } = await req.json() as CreateTransactionFormData;
+
+    if (!title || !amount || !groupCategory || !type || !userId) {
       return NextResponse.json(
         { message: "Todos os campos são obrigatórios" },
         { status: 400 }
       );
     }
 
-    const transaction = await Transaction.create({ userId, title, amount, category, type });
+    const { category, group } = groupCategory
+    const transaction = await Transaction.create({ 
+      userId, 
+      title, 
+      amount, 
+      category, 
+      type, 
+      groupCategory: group, 
+      ...rest 
+    });
     return NextResponse.json(transaction, { status: 201 });
   } catch (error) {
-    console.log(error)
     return NextResponse.json({ message: "Erro ao criar transação" }, { status: 500 });
   }
 }
@@ -41,18 +50,20 @@ export async function GET(req: Request) {
     const startDate = searchParams.get("startDate");
     const endDate = searchParams.get("endDate");
     const category = searchParams.get("category");
+    const groupCategory = searchParams.get("groupCategory");
     const type = searchParams.get("type") as "income" | "expense" | null;
 
     const filter: any = { userId };
 
     if (startDate && endDate) {
       filter.date = {};
-      
+
       const endOfDay = setEndOfDay(new Date(endDate))
       filter.date.$gte = new Date(startDate);
       filter.date.$lte = endOfDay;
     }
-    if (category) filter.category = category;
+    if (category) filter.category = category
+    if (groupCategory) filter.groupCategory = groupCategory;
     if (type) filter.type = type;
 
     const query = Transaction.find(filter).sort({ date: -1 });
@@ -63,7 +74,7 @@ export async function GET(req: Request) {
 
     const transactions = await query;
     const totalTransactions = await Transaction.countDocuments(filter);
-
+    console.log("transactions fetch", transactions)
     return NextResponse.json({
       transactions,
       pagination: {
@@ -74,6 +85,7 @@ export async function GET(req: Request) {
       }
     }, { status: 200 });
   } catch (error) {
+    console.log("Erro get tra", error)
     return NextResponse.json({ message: "Erro interno no servidor" }, { status: 500 });
   }
 }

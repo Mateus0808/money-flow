@@ -1,14 +1,14 @@
 import { create } from "zustand";
 import { TransactionType } from "@/types/transaction-type";
 import { PaginationType } from "@/types/pagination";
-
-type TransactionRequest = Omit<TransactionType, "_id" | "date" | "userId">;
+import { CreateTransactionFormData } from "@/libs/validation/transactionSchema";
+import { errorNotify } from "@/libs/notify/notify";
 
 interface TransactionFilters {
   startDate?: string;
   endDate?: string;
   category?: string;
-  type: "deposit" | "withdraw" | "total" | "";
+  type: "income" | "expense" | "total" | "";
 }
 
 interface TransactionsStore {
@@ -21,7 +21,7 @@ interface TransactionsStore {
   setPagination: (pagination: PaginationType) => void;
   setFilters: (filters: TransactionFilters) => void;
   fetchTransactions: (limit?: string) => Promise<void>
-  createTransaction: (transaction: TransactionRequest) => Promise<void>;
+  createTransaction: (transaction: CreateTransactionFormData) => Promise<void>;
   deleteTransaction: (id: string) => Promise<void>;
 }
 
@@ -68,7 +68,7 @@ export const useTransactionsStore = create<TransactionsStore>((set, get) => ({
     }
   },
 
-  createTransaction: async (transactionRequest: TransactionRequest) => {
+  createTransaction: async (transactionRequest: CreateTransactionFormData) => {
     set({ loading: true });
 
     try {
@@ -91,8 +91,8 @@ export const useTransactionsStore = create<TransactionsStore>((set, get) => ({
           pagination: updatePagination(state.pagination),
         };
       });
-    } catch (error) {
-      console.error("Erro ao criar transação:", error);
+    } catch (error: any) {
+      errorNotify(error.message || "Erro ao criar transação")
     } finally {
       set({ loading: false });
     }
@@ -100,27 +100,21 @@ export const useTransactionsStore = create<TransactionsStore>((set, get) => ({
 
   deleteTransaction: async (id: string) => {
     set({ loading: true });
-    try {
-      const deletedTransaction = await fetch(`/api/transactions?id=${id}`, {
-        method: "DELETE",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
+    
+    const deletedTransaction = await fetch(`/api/transactions?id=${id}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+    });
 
-      if (!deletedTransaction.ok) {
-        throw new Error("Erro ao deletar transação");
-      }
-
-      set((state) => ({
-        transactions: state.transactions.filter((transaction) => transaction._id !== id),
-      }));
-
-      alert("Deletado com sucesso");
-    } catch (error) {
-      console.error("Erro ao deletar transação:", error);
-    } finally {
-      set({ loading: false });
+    if (!deletedTransaction.ok) {
+      throw new Error("Erro ao deletar transação");
     }
+
+    set((state) => ({
+      transactions: state.transactions.filter((transaction) => transaction._id !== id),
+      loading: false
+    }));
   }
 }));
 

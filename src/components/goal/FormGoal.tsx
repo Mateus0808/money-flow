@@ -9,6 +9,7 @@ import { getAllGoalCategories } from "@/services/category.service"
 import { Control, Controller, FieldErrors, SubmitHandler, UseFormHandleSubmit, UseFormRegister, UseFormWatch } from "react-hook-form"
 import clsx from "clsx"
 import { LoadingButton } from "../shared/LoadingButton"
+import { goalMapping } from "@/utils/reverse-goal-mapping";
 
 interface FormGoalProps {
   handleSubmit: UseFormHandleSubmit<IGoalType>
@@ -26,7 +27,7 @@ export const FormGoal = ({
   errors, isLoading, type, control
 }: FormGoalProps) => {
   const goalCategories = getAllGoalCategories();
-  console.log("errors", errors)
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <InputField
@@ -45,14 +46,15 @@ export const FormGoal = ({
         <Controller
           name="initialAmount"
           control={control}
+          defaultValue={0}
           render={({ field: { value, onChange, ...props }, fieldState: { error } }) => (
             <NumericFormat
               customInput={InputField}
               prefix="R$ "
               onValueChange={(values) => onChange(values.floatValue)}
+              value={value}
               thousandSeparator="."
               decimalSeparator=","
-              suffix=",00"
               decimalScale={2}
               allowNegative={false}
               label="Valor Inicial *"
@@ -65,14 +67,15 @@ export const FormGoal = ({
         <Controller
           name="targetAmount"
           control={control}
+          defaultValue={0}
           render={({ field: { value, onChange, ...props }, fieldState: { error } }) => (
             <NumericFormat
               customInput={InputField}
               prefix="R$ "
               onValueChange={(values) => onChange(values.floatValue)}
+              value={value}
               thousandSeparator="."
               decimalSeparator=","
-              suffix=",00"
               decimalScale={2}
               allowNegative={false}
               label="Valor Alvo *"
@@ -88,21 +91,26 @@ export const FormGoal = ({
         <SelectField 
           label="Frequência de Contribuição *" 
           register={register("frequency")}  
-          options={["Mensal", "Semanal", "Única"]} 
+          options={[
+            { value: 'monthly', label: "Mensal" }, 
+            { value: 'weekly', label: "Semanal" }, 
+            { value: 'one-time', label: "Única" }
+          ]} 
           error={errors.frequency?.message} 
         />
         {showContributionField && (
           <Controller
           name="contribution"
           control={control}
+          defaultValue={0}
           render={({ field: { value, onChange, ...props }, fieldState: { error } }) => (
             <NumericFormat
               customInput={InputField}
               prefix="R$ "
               onValueChange={(values) => onChange(values.floatValue)}
+              value={value}
               thousandSeparator="."
               decimalSeparator=","
-              suffix=",00"
               decimalScale={2}
               allowNegative={false}
               label="Aporte *"
@@ -123,7 +131,10 @@ export const FormGoal = ({
       <SelectField 
         label="Prioridade *" 
         register={register('priority')}
-        options={[EnumGoalPriority.LOW, EnumGoalPriority.MEDIUM, EnumGoalPriority.HIGH]} 
+        options={Object.values(EnumGoalPriority).map(priority => ({
+          value: priority,
+          label: priority
+        }))}
         error={errors.priority?.message} 
       />
       <TextAreaField

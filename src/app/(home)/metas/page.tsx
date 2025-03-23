@@ -13,6 +13,8 @@ import { FiltersGoal } from "@/components/goal/FiltersGoal";
 import LoadingGoals from "./loading";
 import { NoChartData } from "@/components/shared/NoChartData";
 import { useGoalStore } from "@/stores/useGoalStore";
+import { useGenericMutation } from "@/hooks/useGenericMutation";
+import { DeleteModalComponent } from "@/components/shared/DeleteModal";
 
 
 export default function ListGoalsPage() {
@@ -24,11 +26,40 @@ export default function ListGoalsPage() {
   
   const { data, isFetching } = useGoals({ priority, month, year, pagination })
 
+  const [goalIdToDelete, setGoalIdToDelete] = useState<string | null>(null);
+  const [deleteModal, setDeleteModal] = useState(false)
+
+  const deleteGoalMutation = useGenericMutation({
+    mutationFn: (goalId: string) => deleteGoal(goalId),
+    queryKey: "goals"
+  });
+
+  const handleOnDelete = async () => {
+    if (goalIdToDelete) {
+      deleteGoalMutation.mutate(goalIdToDelete);
+      setDeleteModal(false);
+      setGoalIdToDelete(null);
+    }
+  };
+
+  const handleOpenModal = (id: string) => {
+    setGoalIdToDelete(id);
+    setDeleteModal(true);
+  }
+
+  const handleCloseModal = () => {
+    setDeleteModal(false);
+    setGoalIdToDelete(null);
+  };
+
   if (isFetching) return <LoadingGoals />
 
   return (
     <div className="min-h-screen">
       <div className="w-full bg-white dark:bg-cardDark mx-auto p-6 rounded-lg shadow-lg mb-6">
+        {deleteModal &&
+          <DeleteModalComponent handleDeleteItem={handleOnDelete} cancelAction={handleCloseModal} />
+        }
         <h1 className="text-2xl dark:text-textLight font-bold">Metas Financeira</h1>
 
         <FiltersGoal 
@@ -57,7 +88,7 @@ export default function ListGoalsPage() {
           <>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {data?.goals && data?.goals?.map((goal, index) => (
-                <GoalCard key={index} goal={goal} deleteGoal={deleteGoal} />
+                <GoalCard key={index} goal={goal} handleOpenModal={() => handleOpenModal(goal._id)} />
               ))}
             </div>
             <PaginationControls pagination={data?.pagination || pagination} setPagination={setPagination} />

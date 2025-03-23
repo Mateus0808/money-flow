@@ -1,27 +1,15 @@
 import { XCircle } from "lucide-react"
-import { ChangeEvent, useEffect, useState } from "react"
-import { useFiltersStore } from "@/stores/useFiltersStore"
-import { TransactionCategories } from "../../shared/TransactionCategories"
-import { DateRangeFilter } from "./DateRangeField"
-import { Button } from "@/components/ui/Button"
-import { ITransactionFilters } from "@/types/filters"
+import { useEffect} from "react"
+import { Controller, useForm } from "react-hook-form"
 
-const categories = [
-  "Trabalho",
-  "Saúde",
-  "Alimentação",
-  "Lazer",
-  "Vestuário",
-  "Moradia",
-  "Transporte",
-  "Educação",
-  "Contas e Serviços",
-  "Investimentos",
-  "Dívidas",
-  "Presentes e Doações",
-  "Tecnologia",
-  "Outros"
-]
+import { ITransactionFilters } from "@/types/filters"
+import { enumTransactionType } from "@/types/transaction-type"
+
+import { Button } from "@/components/ui/Button"
+import { CustomDatePicker } from "@/components/ui/CustomDatePicker"
+import { SelectField } from "@/components/ui/SelectField"
+
+import { TransactionCategories } from "../../shared/TransactionCategories"
 
 interface DashboardFiltersProps {
   toggleFiltersPanel: () => void
@@ -30,87 +18,81 @@ interface DashboardFiltersProps {
   isDashboard?: boolean
 }
 
+const transactionTypeOptions = [
+  { value: 'income', label: 'Entradas' },
+  { value: 'expense', label: 'Saídas' },
+];
+
+const dashboardTransactionTypeOptions = [
+  ...transactionTypeOptions,
+  { value: 'total', label: 'Total' },
+];
+
 export const DashboardFilters = ({ 
   toggleFiltersPanel, filters, setFilters, isDashboard
 }: DashboardFiltersProps) => {
-  const [dateRange, setDateRange] = useState<{ dateFrom: string; dateTo: string }>({
-    dateFrom: "",
-    dateTo: ""
-  })
-  const [selectedCategory, setSelectedCategory] = useState(filters.category || "");
-  const [selectedType, setSelectedType] = useState<"deposit" | "withdraw" | "total" | "">(filters.type || "");
-
-  const handleDateRange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setDateRange((prev) => {
-      const updatedRange = { ...prev, [name]: value };
-      if (updatedRange.dateFrom && updatedRange.dateTo && updatedRange.dateTo < updatedRange.dateFrom) {
-        // alert("A data final não pode ser menor que a data inicial!");
-        return prev;
-      }
-
-      return updatedRange;
-    });
-  }
-
-  const handleTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value as "deposit" | "withdraw" | "total" | "";
-    setSelectedType(value === "" ? "" : value);
-  };
-
-  const applyFilters = () => {
-    const newFilters = {
-      startDate: dateRange.dateFrom?.trim() || "",
-      endDate: dateRange.dateTo?.trim() || "",
-      category: selectedCategory || "",
-      type: selectedType
-    }
-
-    const hasChanged = 
-      filters.startDate !== newFilters.startDate ||
-      filters.endDate !== newFilters.endDate ||
-      filters.category !== newFilters.category ||
-      filters.type !== newFilters.type;
-
-    const isValid = Boolean(newFilters.startDate && newFilters.endDate) || newFilters.type || newFilters.category;
-
-    if (hasChanged && isValid) setFilters(newFilters);
-    toggleFiltersPanel()
-  };
-
-  const handleCleanFilters = () => {
-    const defaultFilters = {
-      startDate: "",
-      endDate: "",
-      category: "",
-      type: "" as ""
-    };
-
-    const hasChanged =
-      filters.startDate !== defaultFilters.startDate ||
-      filters.endDate !== defaultFilters.endDate ||
-      filters.category !== defaultFilters.category ||
-      filters.type !== defaultFilters.type;
-    
-    if (hasChanged) {
-      setFilters(defaultFilters)
-      setSelectedCategory("")
-      setSelectedType("")
-      setDateRange({ dateFrom: "", dateTo: "" })
-    }
-  }
+  const { register, handleSubmit, control, reset, watch, setValue } = useForm<ITransactionFilters>({
+    defaultValues: filters,
+  });
 
   useEffect(() => {
-    setDateRange({
-      dateFrom: filters.startDate || "",
-      dateTo: filters.endDate || "",
+    reset(filters);
+  }, [filters, reset]);
+
+  const onSubmit = (data: ITransactionFilters) => {
+    const hasChanged = 
+      filters.startDate !== data.startDate ||
+      filters.endDate !== data.endDate ||
+      filters.category !== data.category ||
+      filters.groupCategory !== data.groupCategory ||
+      filters.type !== data.type;
+
+    const isValid = 
+      Boolean(data.startDate && data.endDate) 
+      || data.type || data.category || data.groupCategory;
+
+    if (hasChanged && isValid) {
+      setFilters(data);
+    }
+    toggleFiltersPanel();
+  };
+
+  const handleDateChange = (name: "startDate" | "endDate", date: Date | null) => {
+    const startDate = name === "startDate" ? date : watch("startDate");
+    const endDate = name === "endDate" ? date : watch("endDate");
+
+    if (startDate && endDate && startDate > endDate) {
+      if (name === "startDate") {
+        setValue("endDate", startDate);
+      } else {
+        setValue("startDate", endDate);
+      }
+    }
+
+    setValue(name, date);
+  }
+
+  const handleCleanFilters = () => {
+    setFilters({
+      startDate: null,
+      endDate: null,
+      category: '',
+      groupCategory: '',
+      type: enumTransactionType.NONE,
+    })
+    reset({
+      startDate: null,
+      endDate: null,
+      category: '',
+      groupCategory: '',
+      type: enumTransactionType.NONE,
     });
-    setSelectedType(filters.type)
-  }, [filters.startDate, filters.endDate, filters.type]);
+  };
 
   return (
-    <div className="z-50 absolute top-16 right-4 min-w-96 border-2 bg-white shadow-lg dark:border-gray-500 dark:bg-cardDark rounded-lg p-4">
+    <form 
+      onSubmit={handleSubmit(onSubmit)}
+      className="z-50 absolute top-16 right-4 max-w-96 border-2 bg-white shadow-lg dark:border-gray-500 dark:bg-cardDark rounded-lg p-4">
       <div className="relative flex w-full justify-between">
         <p className="dark:text-textLight text-md font-semibold text-gray-600">Filtros</p>
         <button 
@@ -120,59 +102,98 @@ export const DashboardFilters = ({
           <XCircle size={24} />
         </button>
       </div>
-      <div className="h-[1px] w-full mt-2 bg-gray-300 dark:bg-white" />
+
+      <div className="h-[1px] w-full mt-4 bg-gray-300 dark:bg-gray-500" />
+
       <div className="mt-4 flex flex-col justify-start">
         <span className="text-gray-500 font-bold flex items-start">Intervalo de datas</span>
         <div className="grid grid-cols-2 gap-4 mt-1">
-          <DateRangeFilter 
-            label="De:"
-            date={dateRange.dateFrom}
-            handleDateRange={handleDateRange}
-            name="dateFrom"
+          <Controller
+            name="startDate"
+            control={control}
+            render={({ field }) => (
+              <CustomDatePicker
+                label="De:"
+                selected={field.value ? new Date(field.value) : null}
+                onChange={(date) => handleDateChange("startDate", date)}
+              />
+            )}
           />
-          <DateRangeFilter 
-            label="Até:"
-            date={dateRange.dateTo}
-            handleDateRange={handleDateRange}
-            name="dateTo"
+          <Controller
+            name="endDate"
+            control={control}
+            render={({ field }) => (
+              <CustomDatePicker
+                label="Até:"
+                selected={field.value ? new Date(field.value) : null}
+                onChange={(date) => handleDateChange("endDate", date)}
+              />
+            )}
           />
         </div>
       </div>
-      <div className="mt-6 w-full">
+
+      <div className="mt-2 w-full">
         <span className="text-gray-500 font-bold flex items-start">Categoria</span>
-        <div className="grid grid-cols-1 mt-2">
-          <TransactionCategories 
-            disabled={!!selectedType} 
-            category={selectedCategory} 
-            setCategory={setSelectedCategory} 
+        <div className="grid grid-cols-1">
+        <Controller
+            name="category"
+            control={control}
+            render={({ field }) => {
+              return (
+                <TransactionCategories
+                  disabled={!!watch("type") || !!watch("groupCategory")}
+                  value={field.value}
+                  onChange={(e) => field.onChange(e.target.value)}
+                />
+              )
+            }}
           />
         </div>
       </div>
-      <div className="mt-6 w-full">
-        <span className="text-gray-500 font-bold flex items-start">Tipo de transação</span>
-        <div className="grid grid-cols-1 mt-2">
-          <select 
-            className="w-full dark:text-textLight dark:bg-cardDark placeholder:text-white h-12 border-2 dark:border-gray-700 border-gray-300 rounded-lg py-2 px-4 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={selectedType ?? ""} 
-            onChange={(e) => handleTypeChange(e)}
-            disabled={!!selectedCategory}
-          >
-            <option value="">...</option>
-            <option value="deposit">Entradas</option>
-            <option value="withdraw">Saídas</option>
-            {isDashboard && <option value="total">Total</option>}
-          </select>
-        </div>
-        <div className="mt-6 w-full flex justify-between gap-4">
-          <button 
-            type="button" 
-            onClick={handleCleanFilters}
-            className="dark:text-textLight dark:bg-gray-700 px-4 py-2 rounded-lg bg-gray-300 text-gray-700 flex gap-2 items-center hover:opacity-80">
-            Limpar
-          </button>
-          <Button label="Aplicar" onClick={applyFilters} isLoading={false} />
-        </div>
+
+      <div className="mt-2 w-full">
+        <SelectField
+          disabled={!!watch("category") || !!watch("type")} 
+          label="Grupo da categoria"
+          classLabel="text-gray-500 font-bold flex items-start"
+          options={[
+            { value: 'moradia', label: 'Moradia'},
+            { value: 'veículos', label: 'Veículos'},
+            { value: 'transporte', label: 'Transporte'},
+            { value: 'alimentação', label: 'Alimentação'},
+            { value: 'saúde', label: 'Saúde'},
+            { value: 'lazer', label: 'Lazer'},
+            { value: 'educação', label: 'Educação'},
+            { value: 'presentes e doações', label: 'Presentes e Doações'},
+            { value: 'tecnologia', label: 'Tecnologia'},
+            { value: 'finanças', label: 'Finanças'},
+          ]}
+          register={register('groupCategory')}
+        />
       </div>
-    </div>
+
+      <div className="mt-2 w-full">
+        <SelectField
+          disabled={!!watch("category") || !!watch("groupCategory")} 
+          label="Tipo de transação"
+          classLabel="text-gray-500 font-bold flex items-start"
+          options={ isDashboard ? dashboardTransactionTypeOptions : transactionTypeOptions}
+          register={register('type')}
+        />
+      </div>
+
+         
+      <div className="mt-4 w-full flex justify-between gap-4">
+        <button 
+          type="button" 
+          onClick={handleCleanFilters}
+          className="dark:text-textLight dark:bg-gray-700 px-4 py-2 rounded-lg bg-gray-300 text-gray-700 flex gap-2 items-center hover:opacity-80">
+          Limpar
+        </button>
+
+        <Button label="Aplicar"  type="submit" isLoading={false} />
+      </div>
+    </form>
   )
 }

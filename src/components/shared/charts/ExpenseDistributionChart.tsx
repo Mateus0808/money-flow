@@ -1,7 +1,7 @@
 import { 
   Legend, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Tooltip 
 } from "recharts";
-import { NoChartData } from "./NoChartData";
+import { NoChartData } from "../NoChartData";
 
 interface ExpenseDistributionChartProps {
   data:  {

@@ -5,10 +5,8 @@ import clsx from "clsx"
 import { Filter } from "lucide-react"
 
 import { PaginationControls } from "@/components/PaginationControls"
-import { TransactionModal } from "@/components/transactions/create-transaction/TransactionModal"
 import { Button } from "@/components/ui/Button"
 import { TransactionsTable } from "@/components/transactions/table/TransactionsTable"
-import Breadcrumb from "@/components/ui/Breadcrumb"
 import { DashboardFilters } from "@/components/dashboard/filters/DashboardFilters"
 
 import LoadingTable from "./loading"
@@ -17,15 +15,19 @@ import { usePaginationStore } from "@/stores/usePaginationStore"
 import { useFiltersStore } from "@/stores/useFiltersStore"
 import { useFilteredTransactions } from "@/hooks/useFilteredTransactions"
 import { usePaginatedTransactions } from "@/hooks/usePaginatedTransactions"
+import Link from "next/link"
+import { DeleteModalComponent } from "@/components/shared/DeleteModal"
 
 export default function TransactionsPage () {
   const { transactionsFilters, setTransactionsFilters } = useFiltersStore();
   const { pagination, setPagination } = usePaginationStore()
   
   const {  data, isFetching: loading } = useTransactions({ limit: 'all', filters: transactionsFilters })
+  console.log("dataaaaa", data)
   const filteredTransactions = useFilteredTransactions(data?.transactions || [], transactionsFilters);
+  console.log("filteredTransactions", filteredTransactions)
   const paginatedTransactions = usePaginatedTransactions(filteredTransactions, pagination.page, pagination.limit);
-
+  console.log("paginatedTransactions", paginatedTransactions)
   const [openFilter, setOpenFilter] = useState(false)
   const [isNewTransactionOpen, setIsNewTransactionOpen] = useState(false)
 
@@ -48,9 +50,8 @@ export default function TransactionsPage () {
   }, [filteredTransactions, pagination.totalPages, setPagination]);
 
   return (
-    <div className="flex flex-col">
-      <Breadcrumb />
-      <div className="relative bg-white dark:bg-cardDark p-4 rounded-lg shadow-md mt-4 flex justify-between items-center gap-4">
+    <div className="min-h-screen">
+      <div className="relative bg-white dark:bg-cardDark p-4 rounded-lg shadow-md flex justify-between items-center gap-4">
         <h1 className="text-2xl text-primary font-bold dark:text-textLight">Transações</h1>
 
         <button
@@ -72,15 +73,10 @@ export default function TransactionsPage () {
           />
         }
       </div>
-
       <div className="space-y-4 rounded-lg bg-white dark:bg-cardDark p-4 mt-8">
-        <div className="w-44 flex float-end mb-3">
-          <Button label="Nova Transação" onClick={handleNewTransactionModal} isLoading={false} />
-        </div>
-        <TransactionModal
-          isOpen={isNewTransactionOpen}
-          onClose={handleNewTransactionModal}
-        />
+        <Link href="/transactions/adicionar" className="w-44 flex float-end mb-3">
+          <Button label="Nova Transação" isLoading={false} />
+        </Link>
         { loading 
           ? <LoadingTable /> 
           : (

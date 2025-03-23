@@ -10,9 +10,9 @@ type SummaryProps = {
 export const Summary = ({ transactions }: SummaryProps) => {
   const { incomes, outcomes, total } = transactions.reduce(
     (totals, transaction) => {
-      if (transaction.type === 'deposit') {
+      if (transaction.type === 'income') {
         totals.incomes += transaction.amount;
-      } else if (transaction.type === 'withdraw') {
+      } else if (transaction.type === 'expense') {
         totals.outcomes += transaction.amount;
       }
       totals.total = totals.incomes - totals.outcomes
@@ -24,7 +24,7 @@ export const Summary = ({ transactions }: SummaryProps) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <SummaryCard imagePath="/income.svg" label="Entradas" value={incomes} />
-      <SummaryCard imagePath="/outcome.svg" label="Saídas" value={-outcomes} />
+      <SummaryCard imagePath="/outcome.svg" label="Saídas" value={outcomes === 0 ? outcomes : -outcomes} />
       <div className="px-6 py-8 rounded bg-primary shadow-lg">
         <header className="flex items-center justify-between">
           <p className="text-white font-semibold">Total</p>

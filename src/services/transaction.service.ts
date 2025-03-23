@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import { TransactionType, TransactionTypePagination } from "@/types/transaction-type";
 
 export const getCategories = (transactions: TransactionType[]) => {
@@ -16,7 +15,7 @@ export const getCategories = (transactions: TransactionType[]) => {
 export const getExpensesByCategory = (categories: string[], transactions: TransactionType[]) => {
   return categories.reduce((acc, category) => {
     const total = transactions
-      .filter((transaction) => transaction.category === category && transaction.type === 'withdraw')
+      .filter((transaction) => transaction.category === category && transaction.type === 'expense')
       .reduce((sum, transaction) => sum + transaction.amount, 0);
 
     acc[category] = total;
@@ -26,25 +25,25 @@ export const getExpensesByCategory = (categories: string[], transactions: Transa
 
 export const getIncomesAndExpenses = (transactions: TransactionType[]) => {
   const incomes = transactions
-    .filter((transaction) => transaction.type === 'deposit')
+    .filter((transaction) => transaction.type === 'income')
     .reduce((total, transaction) => total + transaction.amount, 0);
 
   const expenses = transactions
-    .filter((transaction) => transaction.type === 'withdraw')
+    .filter((transaction) => transaction.type === 'expense')
     .reduce((total, transaction) => total + transaction.amount, 0);
 
   return { incomes, expenses };
 };
 
-export const getMonthlyData = (transactions: TransactionType[], type?: "deposit" | "withdraw" | "total" | "") => {
+export const getMonthlyData = (transactions: TransactionType[], type?: "income" | "expense" | "total" | "") => {
   const monthlyExpenses = Array(12).fill(0);
   const monthlyIncomes = Array(12).fill(0);
 
   transactions.forEach((transaction) => {
     const month = new Date(transaction.date).getMonth();
-    if (transaction.type === 'withdraw') {
+    if (transaction.type === 'expense') {
       monthlyExpenses[month] += transaction.amount;
-    } else if (transaction.type === 'deposit') {
+    } else if (transaction.type === 'income') {
       monthlyIncomes[month] += transaction.amount;
     }
   });
@@ -76,6 +75,7 @@ export const fetchTransactions =  async (
     }
 
     const result = await res.json();
+    console.log("result transacction nnn", result)
     return result;
   } catch (error) {
     return {

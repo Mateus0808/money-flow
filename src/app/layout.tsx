@@ -5,6 +5,7 @@ import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
 
 import QueryProvider from "@/components/QueryProvider";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,14 +18,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className="font-sans antialiased bg-backgroundLight dark:bg-backgroundDark"
       >
         <ToastContainer />
-        <QueryProvider>
-          {children}
-        </QueryProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <QueryProvider>
+            {children}
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

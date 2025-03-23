@@ -12,8 +12,8 @@ import {
 import Link from "next/link";
 import { Tooltip } from "../ui/Tooltip";
 import { EnumGoalPriority, GoalTypeResponse } from "@/types/goal-type";
-import { useGenericMutation } from "@/hooks/useGenericMutation";
-
+import { reverseGoalMapping } from "@/utils/reverse-goal-mapping";
+import { formatDate } from "@/utils/format-date";
 
 const priorityIcons = {
   Baixa: <CheckCircle className="text-green-600" size={18} />,
@@ -29,22 +29,14 @@ const priorityColor = {
 
 type GoalCardProps = {
   goal: GoalTypeResponse
-  deleteGoal: (id: string) => Promise<void>
+  handleOpenModal: () => void
 }
 
-export const GoalCard = ({ goal, deleteGoal }: GoalCardProps) => {
+export const GoalCard = ({ goal, handleOpenModal }: GoalCardProps) => {
   const progress = Math.ceil((goal.initialAmount * 100) / goal.targetAmount)
 
-  const deleteGoalMutation = useGenericMutation({
-    mutationFn: (goalId: string) => deleteGoal(goalId),
-    queryKey: "goals",
-    successMessage: "Meta deletada com sucesso",
-  });
-
-  const handleOnDelete = async () => {
-    deleteGoalMutation.mutate(goal._id)
-  };
-
+  const mappedFrequency = reverseGoalMapping[goal.frequency] || goal.frequency
+  console.log("mapped frequency", mappedFrequency, reverseGoalMapping[goal.frequency], goal.frequency)
   return (
     <div className="flex flex-col gap-4 shadow-lg p-6 bg-white dark:bg-cardDark rounded-lg">
       <div className="flex justify-between items-center">
@@ -84,7 +76,8 @@ export const GoalCard = ({ goal, deleteGoal }: GoalCardProps) => {
             {new Intl.NumberFormat('pt-BR', {
               style: 'currency',
               currency: 'BRL'
-            }).format(goal.contribution)}/<span className="lowercase">{goal.frequency}</span>
+            }).format(goal.contribution)}/
+            <span className="lowercase">{mappedFrequency}</span>
           </span>
         </p>
       </div>
@@ -101,16 +94,16 @@ export const GoalCard = ({ goal, deleteGoal }: GoalCardProps) => {
         </p>
         <p className="font-medium dark:text-textLight flex items-center gap-1">
           <CalendarClock size={18} className="text-yellow-600" />
-          {new Date(goal.deadline).toLocaleDateString('pt-BR')}
+          {formatDate(new Date(goal.deadline), 'dd MMM, yyyy')}
         </p>
       </div>
 
       <div className="flex justify-end items-center gap-3">
-        <button onClick={handleOnDelete}>
+        <button onClick={handleOpenModal}>
           <Trash2 size={24} className="text-red-500 hover:text-red-600" />
         </button>
         <Link href={`/metas/editar/${goal._id}`}>
-          <Pencil size={24} className="text-gray-500 hover:text-gray-800" />
+          <Pencil size={24} className="text-gray-500 hover:text-gray-700/90 dark:hover:text-gray-600/90" />
         </Link>
       </div>
     </div>

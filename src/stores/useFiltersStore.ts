@@ -1,31 +1,27 @@
+import { ITransactionFilters } from "@/types/filters";
+import { enumTransactionType } from "@/types/transaction-type";
 import { create } from "zustand";
 
-interface TransactionFilters {
-  startDate?: string;
-  endDate?: string;
-  category?: string;
-  type: "deposit" | "withdraw" | "total" | "";
-}
 
 interface FiltersStore {
-  dashboardFilters: TransactionFilters;
-  transactionsFilters: TransactionFilters;
-  setDashboardFilters: (filters: TransactionFilters) => void;
-  setTransactionsFilters: (filters: TransactionFilters) => void;
+  dashboardFilters: ITransactionFilters;
+  transactionsFilters: ITransactionFilters;
+  setDashboardFilters: (filters: ITransactionFilters) => void;
+  setTransactionsFilters: (filters: ITransactionFilters) => void;
 }
 
-export const useFiltersStore = create<FiltersStore>((set, get) => ({
+export const useFiltersStore = create<FiltersStore>((set) => ({
   dashboardFilters: {
-    startDate: "",
-    endDate: "",
+    startDate: null,
+    endDate: null,
     category: "",
-    type: "",
+    type: enumTransactionType.NONE,
   },
   transactionsFilters: {
-    startDate: "",
-    endDate: "",
+    startDate: null,
+    endDate: null,
     category: "",
-    type: "",
+    type: enumTransactionType.NONE,
   },
   setDashboardFilters: (filters) => set({ dashboardFilters: filters }),
   setTransactionsFilters: (filters) => set({ transactionsFilters: filters }),

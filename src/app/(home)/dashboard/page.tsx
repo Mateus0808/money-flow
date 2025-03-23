@@ -4,7 +4,7 @@ import { useState } from "react";
 import { DashboardFilters } from "@/components/dashboard/filters/DashboardFilters";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { FilterButton } from "@/components/ui/FilterButton";
-import { ChartsSection } from "@/components/shared/ChartsSection";
+import { ChartsSection } from "@/components/shared/charts/ChartsSection";
 
 import { useFinanceDataStore } from "@/stores/useFinanceDataStore";
 import { useFiltersStore } from "@/stores/useFiltersStore";
@@ -19,13 +19,15 @@ export default function DashboardPage() {
   const { data, isFetching: loading } = useTransactions({
     limit: 'all'
   })
+
   const filteredTransactions = useDashboardFilters(data?.transactions || [], dashboardFilters);
   const [openFilter, setOpenFilter] = useState(false)
 
   const { chartBarData } = useFinanceDataStore(
     filteredTransactions, 
     dashboardFilters.type, 
-    dashboardFilters.category
+    dashboardFilters.category,
+    dashboardFilters.groupCategory
   );
   const { fiveOutcomeCharData, radarChartData } = useFinanceDataStore(filteredTransactions)
 
@@ -59,6 +61,7 @@ export default function DashboardPage() {
           fiveOutcomeCharData={fiveOutcomeCharData}
           type={dashboardFilters.type} 
           category={dashboardFilters.category}
+          groupCategory={dashboardFilters.groupCategory}
           isDashboard={true}
         />
       </div>

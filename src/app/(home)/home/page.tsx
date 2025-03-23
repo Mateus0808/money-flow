@@ -8,7 +8,7 @@ import { useFinanceDataStore } from "@/stores/useFinanceDataStore";
 
 import { SimpleGoalCard } from "@/components/home/SimpleGoalCard";
 import { TransactionsTable } from "@/components/transactions/table/TransactionsTable";
-import { ChartsSection } from "@/components/shared/ChartsSection";
+import { ChartsSection } from "@/components/shared/charts/ChartsSection";
 import { CardContainer } from "@/components/shared/CardContainer";
 import { NoChartData } from "@/components/shared/NoChartData";
 

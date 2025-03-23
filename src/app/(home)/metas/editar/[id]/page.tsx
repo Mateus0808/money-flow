@@ -1,6 +1,6 @@
 'use client'
 
-import { use, useEffect } from "react";
+import { use, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { GoalTypeResponse } from "@/types/goal-type";
@@ -9,10 +9,12 @@ import { goalSchema } from "@/libs/validation/goalSchema";
 import { FormGoal } from "@/components/goal/FormGoal";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Breadcrumb from "@/components/ui/Breadcrumb";
+import { LoadingButton } from "@/components/shared/LoadingButton";
 
 
 export default function EditGoal({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const [isLoading, setIsLoading] = useState(true);
 
   const {
     register,
@@ -20,7 +22,7 @@ export default function EditGoal({ params }: { params: Promise<{ id: string }> }
     watch,
     reset,
     control,
-    formState: { errors, isLoading },
+    formState: { errors, isLoading: isFormLoading  },
   } = useForm({
     resolver: zodResolver(goalSchema),
   });
@@ -30,7 +32,7 @@ export default function EditGoal({ params }: { params: Promise<{ id: string }> }
 
   useEffect(() => {
     getData()
-  }, [])
+  }, [id])
 
   const getData = async () => {
     const res = await fetch('/api/goals/' + id)
@@ -42,13 +44,14 @@ export default function EditGoal({ params }: { params: Promise<{ id: string }> }
       ...goal,
       deadline: goal.deadline ? new Date(goal.deadline).toISOString().split("T")[0] : undefined, 
     })
-}
+    setIsLoading(false)
+  }
 
   const onSubmit = async (data: any) => {
-    const response = await fetch("/api/goals", {
-      method: "PATCH",
+    const response = await fetch(`/api/goals/${id}`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ ...data, id }),
     })
     if (!response.ok) {
       alert('Erro ao criar meta.');
@@ -57,6 +60,13 @@ export default function EditGoal({ params }: { params: Promise<{ id: string }> }
     alert('Meta ATUALIZADA com sucesso!');
   };
 
+  if (isLoading) {
+    return (
+      <div className="w-full min-h-screen flex justify-center mt-14">
+        <LoadingButton />
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen rounded-lg flex flex-col justify-center items-center">
@@ -69,7 +79,7 @@ export default function EditGoal({ params }: { params: Promise<{ id: string }> }
           onSubmit={onSubmit}
           showContributionField={showContributionField}
           errors={errors}
-          isLoading={isLoading}
+          isLoading={isFormLoading}
           type="EDIT"
           control={control}
         />
