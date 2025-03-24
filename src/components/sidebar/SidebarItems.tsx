@@ -9,22 +9,22 @@ const menuItems = [
   { name: "Transações", icon: <Currency size={24} />, path: "/transactions" },
   { name: "Metas", icon: <Goal size={24} />, path: "/metas" },
   { name: "Configurações", icon: <Settings size={24} />, path: "/settings" },
-  { name: "Relatórios", icon: <FileText size={24} />, path: "/reports" },
+  // { name: "Relatórios", icon: <FileText size={24} />, path: "/reports" },
 ];
 
 interface SidebaritemsProps {
-  isDesktop: boolean
   handleLogout: () => void
   theme: string
   setTheme: (newTheme: "light" | "dark") => void
 }
 
-export const SidebarItems = ({ isDesktop, handleLogout, theme, setTheme }: SidebaritemsProps) => {
+export const SidebarItems = ({ handleLogout, theme, setTheme }: SidebaritemsProps) => {
   return (
     <aside
-      className={`sticky left-0 top-0 h-screen p-4 bg-sidebar-light dark:bg-sidebar-dark text-white transition-all ${
-        isDesktop ? "w-56" : "w-16"
-      }`}>
+      className={clsx(
+        'sticky left-0 top-0 h-screen p-4 bg-sidebar-light dark:bg-sidebar-dark text-white transition-all',
+        'w-16 md:w-56'
+      )}>
 
       <div className="relative flex items-center justify-center my-4">
         <Image className="" height={124} width={124} alt="Logo" src="/ms-logo.png" />
@@ -38,7 +38,7 @@ export const SidebarItems = ({ isDesktop, handleLogout, theme, setTheme }: Sideb
             className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 hover:text-black transition"
           >
             {item.icon}
-            {isDesktop && <span className="text-sm">{item.name}</span>}
+            <span className="hidden md:block text-sm">{item.name}</span>
           </Link>
         ))}
 
@@ -47,7 +47,7 @@ export const SidebarItems = ({ isDesktop, handleLogout, theme, setTheme }: Sideb
           className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 hover:text-black transition"
         >
           <LogOut size={24} />
-          {isDesktop && <span className="text-sm">Sair</span>}
+          <span className="hidden md:block text-sm">Sair</span>
         </button>
 
         <button
@@ -61,12 +61,12 @@ export const SidebarItems = ({ isDesktop, handleLogout, theme, setTheme }: Sideb
           {theme === "dark" ? (
             <>
               <span>☀️</span>
-              {isDesktop && <span>Light Mode</span>}
+              <span className="hidden md:block">Light Mode</span>
             </>
           ) : (
             <>
               <span>🌙</span>
-              {isDesktop && <span>Dark Mode</span>}
+              <span className="hidden md:block">Dark Mode</span>
             </>
           )}
         </button>

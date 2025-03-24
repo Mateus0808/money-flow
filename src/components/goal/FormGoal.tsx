@@ -6,10 +6,10 @@ import { SelectField } from "../ui/SelectField"
 import { TextAreaField } from "../ui/TextAreaField"
 import { EnumGoalPriority, IGoalType } from "@/types/goal-type"
 import { getAllGoalCategories } from "@/services/category.service"
-import { Control, Controller, FieldErrors, SubmitHandler, UseFormHandleSubmit, UseFormRegister, UseFormWatch } from "react-hook-form"
+import { Control, Controller, FieldErrors, SubmitHandler, UseFormHandleSubmit, UseFormRegister } from "react-hook-form"
 import clsx from "clsx"
 import { LoadingButton } from "../shared/LoadingButton"
-import { goalMapping } from "@/utils/reverse-goal-mapping";
+import { CustomDatePicker } from "../ui/CustomDatePicker";
 
 interface FormGoalProps {
   handleSubmit: UseFormHandleSubmit<IGoalType>
@@ -87,7 +87,7 @@ export const FormGoal = ({
         />
         
       </div>          
-      <div className="flex w-full gap-4">
+      <div className="flex flex-col sm:flex-row w-full gap-4">
         <SelectField 
           label="Frequência de Contribuição *" 
           register={register("frequency")}  
@@ -122,11 +122,17 @@ export const FormGoal = ({
         />
         )}
       </div>
-      <InputField 
-        label="Data Limite *" 
-        register={register("deadline", { valueAsDate: false })}  
-        type="date" 
-        error={errors.deadline?.message} 
+      <Controller
+        name="deadline"
+        control={control}
+        render={({ field, fieldState: { error } }) => (
+          <CustomDatePicker
+            label="Data Limite"
+            selected={field.value ? field.value : null}
+            onChange={(date) => field.onChange(date)}
+            error={error?.message}
+          />
+        )}
       />
       <SelectField 
         label="Prioridade *" 
@@ -160,7 +166,7 @@ export const FormGoal = ({
           'text-white p-2 rounded-md hover:bg-indigo-700 transition duration-200',
           'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
           )}>
-            { isLoading ? <LoadingButton /> : type === "EDIT" ? "Atualizar Meta" : "Criar Meta"}
+            { isLoading ? <LoadingButton /> : (type === "EDIT" ? "Atualizar Meta" : "Criar Meta")}
         </button>
       </div>
     </form>

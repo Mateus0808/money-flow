@@ -25,7 +25,7 @@ export const SimpleGoalCard = ({ goal }: SimpleGoalCardProps) => {
     <div className="flex flex-col gap-4 px-4 py-3 bg-white dark:bg-cardDark border-t-2 border-gray-200">
       <div className="flex justify-between items-center"> 
         <Tooltip content={goal.goalName}>
-          <p className="font-semibold text-lg dark:text-white truncate whitespace-nowrap max-w-full cursor-pointer">
+          <p className="font-semibold text-gray-700 text-lg dark:text-white truncate whitespace-nowrap max-w-full cursor-pointer">
             {goal.goalName}
           </p>
         </Tooltip>

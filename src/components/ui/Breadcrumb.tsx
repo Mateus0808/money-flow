@@ -7,6 +7,9 @@ export default function Breadcrumb() {
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
 
+  const isUUID = (segment: string) =>
+    /^[0-9a-f]{24}$/i.test(segment);
+
   return (
     <nav className="text-gray-600 text-sm w-full">
       <ol className="flex items-center gap-2">
@@ -16,24 +19,27 @@ export default function Breadcrumb() {
           </Link>
         </li>
 
-        {pathSegments.map((segment, index) => {
-          const path = `/${pathSegments.slice(0, index + 1).join("/")}`;
-          const isLast = index === pathSegments.length - 1;
-          const formattedSegment = segment.charAt(0).toUpperCase() + segment.slice(1);
+        {pathSegments
+          .filter((segment) => !isUUID(segment))
+          .map((segment, index, filteredSegments) => {
+            const path = `/${filteredSegments.slice(0, index + 1).join("/")}`;
+            const isLast = index === filteredSegments.length - 1;
+            const formattedSegment = segment.charAt(0).toUpperCase() + segment.slice(1);
 
-          return (
-            <li key={path} className="flex items-center">
-              <ChevronRight size={16} className="mr-1 text-gray-400"/>
-              {isLast ? (
-                <span className="text-gray-400 font-bold">{formattedSegment}</span>
-              ) : (
-                <Link href={path} className="text-gray-400 font-bold hover:underline">
-                  {formattedSegment}
-                </Link>
-              )}
-            </li>
-          );
-        })}
+            return (
+              <li key={path} className="flex items-center">
+                <ChevronRight size={16} className="mr-1 text-gray-400"/>
+                {isLast ? (
+                  <span className="text-gray-400 font-bold">{formattedSegment}</span>
+                ) : (
+                  <Link href={path} className="text-gray-400 font-bold hover:underline">
+                    {formattedSegment}
+                  </Link>
+                )}
+              </li>
+            );
+          }
+        )}
       </ol>
     </nav>
   );

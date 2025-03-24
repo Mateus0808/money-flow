@@ -19,7 +19,7 @@ export const PaginationControls = ({ pagination, setPagination }: PaginationProp
   return (
     <div className="flex justify-between items-center mt-2">
       <button
-        className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+        className="px-4 py-2 text-gray-700 bg-gray-200 rounded disabled:opacity-50"
         onClick={handlePrevPage}
         disabled={pagination.page === 1}
       >
@@ -31,7 +31,7 @@ export const PaginationControls = ({ pagination, setPagination }: PaginationProp
       </span>
 
       <button
-        className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+        className="px-4 py-2 text-gray-700 bg-gray-200 rounded disabled:opacity-50"
         onClick={handleNextPage}
         disabled={pagination.page >= pagination.totalPages}
       >

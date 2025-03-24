@@ -42,7 +42,7 @@ export const TransactionsTable = ({ transactions, showActions = false }: Transac
 
   if (transactions.length === 0) {
     return (
-      <div className="h-[194px]">
+      <div className="w-full h-[194px] flex items-center justify-center">
         <NoChartData label="🔍 Nenhuma transação disponível" />  
       </div>
     )

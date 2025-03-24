@@ -9,9 +9,10 @@ interface DatePickerProps {
   label: string;
   selected: Date | null;
   onChange: (date: Date | null) => void;
+  error?: string
 }
 
-export const CustomDatePicker: React.FC<DatePickerProps> = ({ label, selected, onChange }) => {
+export const CustomDatePicker: React.FC<DatePickerProps> = ({ label, selected, onChange, error }) => {
   return (
     <div className="flex flex-col w-full">
       <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -27,6 +28,7 @@ export const CustomDatePicker: React.FC<DatePickerProps> = ({ label, selected, o
           'dark:text-textLight focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500'
         )}
       />
+      {error && <span className="text-sm text-red-500 mt-1">{error}</span>}
     </div>
   );
 };

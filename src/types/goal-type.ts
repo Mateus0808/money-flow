@@ -14,7 +14,7 @@ export interface IGoalType {
   targetAmount: number
   contribution: number
   frequency: string
-  deadline: string
+  deadline: Date
   description?: string
   reminder: boolean
 }

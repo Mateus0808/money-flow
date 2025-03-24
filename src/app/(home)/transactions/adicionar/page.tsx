@@ -42,10 +42,9 @@ export default function CreateTransaction () {
   });
 
   const onSubmit = async (formData: CreateTransactionFormData) => {
-    console.log("formData", formData)
     mutation.mutate(formData)
   }
-  console.log("errors", errors)
+
   return (
     <div className="min-h-screen rounded-lg flex flex-col justify-start items-center">
       <div className="max-w-2xl bg-white dark:bg-cardDark p-6 rounded-lg shadow-md w-full">
@@ -70,7 +69,6 @@ export default function CreateTransaction () {
                 onValueChange={(values) => onChange(values.floatValue)}
                 thousandSeparator="."
                 decimalSeparator=","
-                suffix=",00"
                 decimalScale={2}
                 allowNegative={false}
                 label="Valor"
@@ -116,11 +114,12 @@ export default function CreateTransaction () {
             <Controller
               name="date"
               control={control}
-              render={({ field }) => (
+              render={({ field, fieldState: { error } }) => (
                 <CustomDatePicker
                   label="Data da Transação"
                   selected={field.value ? field.value : null}
                   onChange={(date) => field.onChange(date)}
+                  error={error?.message}
                 />
               )}
             />

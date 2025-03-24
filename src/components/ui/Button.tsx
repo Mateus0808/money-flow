@@ -1,3 +1,5 @@
+'use client'
+
 import clsx from "clsx"
 import { ButtonHTMLAttributes } from "react"
 import { LoadingButton } from "../shared/LoadingButton"

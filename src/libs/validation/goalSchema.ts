@@ -8,12 +8,11 @@ export const goalSchema = z.object({
   initialAmount: z.number().min(0, 'O valor inicial não pode ser negativo.'),
   frequency: z.string().nonempty('Selecione a frequência de contribuição.'),
   contribution: z.number().min(0, 'O aporte não pode ser negativo.'),
-  deadline: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 
-    "A data deve estar no formato DD-MM-YYYY.").refine(
+  deadline: z.date().refine(
     (date) => {
       const currentDate = new Date();
       const selectedDate = new Date(date);
-      return selectedDate > currentDate;
+      return selectedDate.getTime() >= currentDate.getTime();
     },
     {
       message: "A data limite deve ser futura.",

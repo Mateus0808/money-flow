@@ -22,7 +22,8 @@ export default function CreateGoal() {
       targetAmount: 0,
       initialAmount: 0,
       contribution: 0,
-      frequency: ''
+      frequency: '',
+      deadline: new Date()
     },
     resolver: zodResolver(goalSchema),
   });
@@ -47,7 +48,9 @@ export default function CreateGoal() {
   return (
     <div className="min-h-screen rounded-lg flex flex-col justify-center items-center">
       <div className="max-w-2xl bg-white dark:bg-cardDark p-6 rounded-lg shadow-md w-full">
-        <h1 className="text-2xl font-bold mb-6 text-gray-700 dark:text-textLight">Adicionar Meta Financeira</h1>
+        <h1 className="text-2xl font-bold mb-6 text-gray-700 dark:text-textLight">
+          Adicionar Meta Financeira
+        </h1>
         <FormGoal 
           handleSubmit={handleSubmit}
           onSubmit={onSubmit}

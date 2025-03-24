@@ -13,7 +13,6 @@ export default function Sidebar() {
   const queryClient = useQueryClient()
   const { theme, setTheme } = useTheme()
   const { logout } = useAuthStore()
-  const isDesktop = useMediaQuery("(min-width: 768px)");
   const router = useRouter()
   const [mounted, setMounted] = useState(false);
 
@@ -31,7 +30,6 @@ export default function Sidebar() {
 
   return (
     <SidebarItems 
-      isDesktop={isDesktop}
       handleLogout={handleLogout}
       theme={theme}
       setTheme={setTheme}

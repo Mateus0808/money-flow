@@ -15,7 +15,7 @@ export const FiveOutcomeChart = ({ data }: FiveOutcomeChartProps) => {
 
   if (data.length === 0) {
     return (
-      <div className="h-[342px]">
+      <div className="w-full h-[342px] flex items-center justify-center">
         <NoChartData label="🔍 Nenhum dado disponível para os períodos selecionados."/>  
       </div>
     )

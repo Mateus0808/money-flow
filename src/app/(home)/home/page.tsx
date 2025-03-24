@@ -45,7 +45,7 @@ export default function HomePage() {
         </CardContainer>
         <CardContainer title="Objetivos" width="xl:w-1/3">
           {goalResponse?.goals.length === 0 ? (
-            <div className="h-[194px]">
+            <div className="w-full h-[194px] flex items-center justify-center">
               <NoChartData label="🔍 Nenhum objetivo cadastrado"/>
             </div>
           ) : (

@@ -60,7 +60,7 @@ export default function ListGoalsPage() {
         {deleteModal &&
           <DeleteModalComponent handleDeleteItem={handleOnDelete} cancelAction={handleCloseModal} />
         }
-        <h1 className="text-2xl dark:text-textLight font-bold">Metas Financeira</h1>
+        <h1 className="text-2xl text-gray-700 dark:text-textLight font-bold">Metas Financeira</h1>
 
         <FiltersGoal 
           month={month}
@@ -83,7 +83,9 @@ export default function ListGoalsPage() {
       </div>
 
       {data?.goals.length === 0 
-        ? <NoChartData label="🔍 Nenhum objetivo disponível"/> 
+        ? <div className="w-full h-[194px] flex items-center justify-center">
+            <NoChartData label="🔍 Nenhum objetivo disponível"/> 
+          </div>
         : (
           <>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

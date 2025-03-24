@@ -36,12 +36,12 @@ export const GoalCard = ({ goal, handleOpenModal }: GoalCardProps) => {
   const progress = Math.ceil((goal.initialAmount * 100) / goal.targetAmount)
 
   const mappedFrequency = reverseGoalMapping[goal.frequency] || goal.frequency
-  console.log("mapped frequency", mappedFrequency, reverseGoalMapping[goal.frequency], goal.frequency)
+
   return (
     <div className="flex flex-col gap-4 shadow-lg p-6 bg-white dark:bg-cardDark rounded-lg">
       <div className="flex justify-between items-center">
         <Tooltip content={goal.goalName}>
-          <p className="font-semibold text-lg dark:text-white truncate whitespace-nowrap max-w-full cursor-pointer">
+          <p className="font-semibold text-gray-700 text-lg dark:text-white truncate whitespace-nowrap max-w-full cursor-pointer">
             {goal.goalName}
           </p>
         </Tooltip>
@@ -60,7 +60,7 @@ export const GoalCard = ({ goal, handleOpenModal }: GoalCardProps) => {
       </div>
 
       <div className="flex justify-between items-center text-sm">
-        <p className="font-medium dark:text-textLight flex items-center gap-1">
+        <p className="font-medium text-gray-700 dark:text-textLight flex items-center gap-1">
           <Target size={18} className="text-red-600" />
           Objetivo: 
           <span className="text-gray-700 dark:text-textLight font-semibold">
@@ -83,7 +83,7 @@ export const GoalCard = ({ goal, handleOpenModal }: GoalCardProps) => {
       </div>
 
       <div className="flex justify-between items-center text-sm">
-        <p className="font-medium dark:text-white flex items-center gap-1">
+        <p className="font-medium text-gray-700 dark:text-white flex items-center gap-1">
           <DollarSign size={18} className="text-green-600" />
           Montante: <span className="text-gray-700 dark:text-textLight font-semibold">
             {new Intl.NumberFormat('pt-BR', {
@@ -92,7 +92,7 @@ export const GoalCard = ({ goal, handleOpenModal }: GoalCardProps) => {
             }).format(goal.initialAmount)}
           </span>
         </p>
-        <p className="font-medium dark:text-textLight flex items-center gap-1">
+        <p className="font-medium text-gray-700 dark:text-textLight flex items-center gap-1">
           <CalendarClock size={18} className="text-yellow-600" />
           {formatDate(new Date(goal.deadline), 'dd MMM, yyyy')}
         </p>

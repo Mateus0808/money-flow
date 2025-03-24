@@ -27,7 +27,7 @@ export const RadioBox = ({ activeColor, imagePath, title, isActive, ...rest }: R
       {...rest}
     >
       <Image alt="Deposit" src={imagePath} height={20} width={20} />
-      <span className="dark:text-textLight">{title}</span>
+      <span className="text-gray-700 dark:text-textLight">{title}</span>
     </button>
   )
 }

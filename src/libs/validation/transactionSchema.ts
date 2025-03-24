@@ -7,21 +7,25 @@ const categorySchema = z.object({
 
 export const transactionSchema = z.object({
   title: z.string().min(3, "O título deve ter pelo menos 3 caracteres."),
-  amount: z.number().positive("O valor deve ser maior que zero."),
+  amount: z.preprocess(
+    (value) => (typeof value === "number" ? value : 0), 
+    z.number().positive("O valor deve ser maior que zero."),
+  ),
   groupCategory: z.preprocess(
     (val) => {
       try {
-        // Tenta fazer o parse do valor JSON
         return JSON.parse(val as string);
       } catch {
-        // Se falhar, retorna null para ser validado pelo schema
-        return null;
+        return {
+          group: '',
+          category: ''
+        };
       }
     },
     categorySchema.refine(
-      (val) => val !== null,
-      "A categoria deve ser um objeto válido."
-    )
+      (val) => val !== null && val.category !== '' && val.group !== '',
+      "Selecione uma categoria"
+    ), { message: 'Selecione uma categoria' }
   ),
   type: z.enum(["income", "expense"]),
   date: z.date({ message: 'Data inválida' }),

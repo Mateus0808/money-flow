@@ -9,7 +9,7 @@ export const DeleteModalComponent = ({
 }: DeleteModalComponentProps) => {
   return (
     <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-      <div className="fixed inset-0 bg-gray-500/10 dark:bg-gray-100/10 transition-opacity" aria-hidden="true"></div>
+      <div className="fixed inset-0 bg-gray-500/5 dark:bg-gray-100/5 transition-opacity" aria-hidden="true"></div>
 
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div className="flex min-h-full items-end justify-center p-6 text-center sm:items-center sm:p-0">

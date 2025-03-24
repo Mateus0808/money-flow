@@ -19,7 +19,7 @@ export const FiltersGoal = ({
         <select
           value={priority}
           onChange={(e) => setPriority(e.target.value)}
-          className="p-2 border rounded-lg dark:bg-gray-200"
+          className="p-2 border rounded-lg text-gray-700 bg-gray-200 dark:bg-gray-200"
         >
           <option value="">Prioridades</option>
           <option value={EnumGoalPriority.LOW}>Baixa</option>
@@ -30,7 +30,7 @@ export const FiltersGoal = ({
         <select
           value={month}
           onChange={(e) => setMonth(e.target.value)}
-          className="p-2 border rounded-lg dark:bg-gray-200"
+          className="p-2 border rounded-lg text-gray-700 bg-gray-200 dark:bg-gray-200"
         >
           <option value="">Meses</option>
           <option value="01">Janeiro</option>
@@ -50,7 +50,7 @@ export const FiltersGoal = ({
         <select
           value={year}
           onChange={(e) => setYear(e.target.value)}
-          className="p-2 border rounded-lg dark:bg-gray-200"
+          className="p-2 border rounded-lg text-gray-700 bg-gray-200 dark:bg-gray-200"
         >
           <option value="">Anos</option>
           {Array.from({ length: 10 }, (_, i) => {

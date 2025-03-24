@@ -111,22 +111,24 @@ export const DashboardFilters = ({
           <Controller
             name="startDate"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState: { error } }) => (
               <CustomDatePicker
                 label="De:"
                 selected={field.value ? new Date(field.value) : null}
                 onChange={(date) => handleDateChange("startDate", date)}
+                error={error?.message}
               />
             )}
           />
           <Controller
             name="endDate"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState: { error } }) => (
               <CustomDatePicker
                 label="Até:"
                 selected={field.value ? new Date(field.value) : null}
                 onChange={(date) => handleDateChange("endDate", date)}
+                error={error?.message}
               />
             )}
           />

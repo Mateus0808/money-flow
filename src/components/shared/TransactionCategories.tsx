@@ -81,7 +81,7 @@ export const TransactionCategories = ({
 }: TransactionCategoriesProps) => {
   return (
     <select
-      className="w-full dark:text-textLight dark:bg-cardDark placeholder:text-white h-12 border-2 dark:border-gray-700 border-gray-300 rounded-lg py-2 px-4 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="w-full text-gray-700 dark:text-textLight dark:bg-cardDark placeholder:text-white h-12 border-2 dark:border-gray-700 border-gray-300 rounded-lg py-2 px-4 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
       {...props}
       value={value}
     >
