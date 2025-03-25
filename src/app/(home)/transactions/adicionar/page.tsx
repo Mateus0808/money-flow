@@ -65,7 +65,7 @@ export default function CreateTransaction () {
           <Controller
             name="amount"
             control={control}
-            render={({ field: { value, onChange, ...props }, fieldState: { error } }) => (
+            render={({ field: { onChange, ...props }, fieldState: { error } }) => (
               <NumericFormat
                 customInput={InputField}
                 prefix="R$ "

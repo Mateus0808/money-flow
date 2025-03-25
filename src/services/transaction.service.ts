@@ -76,7 +76,7 @@ export const fetchTransactions =  async (
 
     const result = await res.json();
     return result;
-  } catch (error) {
+  } catch {
     return {
       transactions: [],
       pagination: {
