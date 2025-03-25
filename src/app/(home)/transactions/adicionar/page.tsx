@@ -21,7 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 export default function CreateTransaction () {
   const queryClient = useQueryClient();
   const router = useRouter()
-  const { createTransaction, loading } = useTransactionsStore()
+  const { createTransaction } = useTransactionsStore()
 
   const { 
     handleSubmit, register, setValue, control, watch, formState: { errors, isLoading } 
@@ -167,7 +167,7 @@ export default function CreateTransaction () {
               Cancelar
             </Link>
             <div className="w-1/2 h-12">
-              <Button label="Salvar" type="submit" isLoading={loading} />
+              <Button label="Salvar" type="submit" isLoading={isLoading} />
             </div>
           </div>
         </form>
