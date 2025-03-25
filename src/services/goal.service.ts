@@ -30,7 +30,7 @@ export const fetchGoals = async ({
 
     const result = await response.json();
     return result
-  } catch (err) {
+  } catch {
     return {
       goals: [],
       pagination: {

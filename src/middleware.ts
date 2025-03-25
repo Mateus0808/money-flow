@@ -32,7 +32,7 @@ async function validateToken(token: string): Promise<boolean> {
     }
 
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 }

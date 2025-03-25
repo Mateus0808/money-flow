@@ -56,7 +56,7 @@ export const getMonthlyData = (transactions: TransactionType[], type?: "income" 
 };
 
 export const fetchTransactions =  async (
-  page?: number, limit?: string, filters?: {}
+  page?: number, limit?: string, filters?: object
 ): Promise<TransactionTypePagination> => {
   try {
     const url = new URL('/api/transactions', window.location.origin);

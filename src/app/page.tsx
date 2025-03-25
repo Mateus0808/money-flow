@@ -1,13 +1,12 @@
 "use client";
 
 import Link from "next/link";
-// import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/Button";
-import { CardContainer } from "@/components/shared/CardContainer";
 import clsx from "clsx";
 import { ReactNode } from "react";
 import Image from "next/image";
+
+import { Button } from "@/components/ui/Button";
 
 export function Card({ className, children }: { className?: string; children: ReactNode }) {
   return (
