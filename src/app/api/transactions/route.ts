@@ -74,7 +74,7 @@ export async function GET(req: Request) {
 
     const transactions = await query;
     const totalTransactions = await Transaction.countDocuments(filter);
-    console.log("transactions fetch", transactions)
+
     return NextResponse.json({
       transactions,
       pagination: {

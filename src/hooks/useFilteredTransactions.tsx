@@ -4,7 +4,6 @@ import { useMemo } from "react";
 
 export const useFilteredTransactions = (transactions: TransactionType[], filters: any) => {
   return useMemo(() => {
-    console.log("useFilteredTransactions", transactions, filters)
     if (!transactions || transactions.length === 0) return [];
     return transactions.filter((t) => {
       const matchStartDate = filters.startDate ? new Date(t.date) >= new Date(filters.startDate) : true;

@@ -60,8 +60,7 @@ export const useTransactionsStore = create<TransactionsStore>((set, get) => ({
       const result = await res.json();
 
       set({ transactions: result.transactions, pagination: result.pagination });
-    } catch (error) {
-      console.error("Erro ao buscar transações:", error);
+    } catch {
       return
     } finally {
       set({ loading: false });

@@ -75,7 +75,6 @@ export const fetchTransactions =  async (
     }
 
     const result = await res.json();
-    console.log("result transacction nnn", result)
     return result;
   } catch (error) {
     return {

@@ -72,8 +72,7 @@ export const useAuthStore = create<AuthStore>((
       } else {
         set({ user: null, loading: false });
       }
-    } catch (error) {
-      console.error("Erro ao verificar autenticação:", error);
+    } catch {
       set({ user: null, loading: false });
     }
   },
