@@ -1,15 +1,12 @@
 'use client'
 
 import { Trash2 } from "lucide-react"
-import { ItemTDTable } from "./ItemTDTable";
-import { useTransactionsStore } from "@/stores/useTransactionsStore";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { formatDate } from "@/utils/format-date";
-import { useGenericMutation } from "@/hooks/useGenericMutation";
-import { categoryMapping } from "@/components/shared/TransactionCategories";
 import { reverseCategoryMapping } from "@/utils/reverse-category-mapping";
-import { DeleteModalComponent } from "@/components/shared/DeleteModal";
-import { useState } from "react";
+
+import { ItemTDTable } from "./ItemTDTable";
+
 
 interface ItemTransactionProps {
   _id: string;
@@ -23,7 +20,7 @@ interface ItemTransactionProps {
 }
 
 export const ItemTransaction = ({ 
-  _id, amount, category, date, title, type, showActions, onDelete
+  amount, category, date, title, type, showActions, onDelete
 }: ItemTransactionProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   

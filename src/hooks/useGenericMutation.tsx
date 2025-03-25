@@ -24,7 +24,7 @@ export function useGenericMutation<TData, TVariables>({
         successNotify(successMessage);
       }
     },
-    onError: (error: any) => {
+    onError: (error: { message: string }) => {
       errorNotify(error.message);
     },
   });

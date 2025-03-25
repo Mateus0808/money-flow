@@ -1,4 +1,3 @@
-import { reverseCategoryMapping } from "@/utils/reverse-category-mapping";
 import { SelectHTMLAttributes } from "react";
 
 export const categoryMapping: { [key: string]: string } = {

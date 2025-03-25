@@ -1,101 +1,109 @@
+"use client";
+
+import Link from "next/link";
+// import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/Button";
+import { CardContainer } from "@/components/shared/CardContainer";
+import clsx from "clsx";
+import { ReactNode } from "react";
 import Image from "next/image";
+
+export function Card({ className, children }: { className?: string; children: ReactNode }) {
+  return (
+    <div className={clsx("bg-white rounded-2xl shadow-md p-4 border", className)}>
+      {children}
+    </div>
+  );
+}
+
+export function CardContent({ className, children }: { className?: string; children: ReactNode }) {
+  return <div className={clsx("p-4", className)}>{children}</div>;
+}
 
 export default function Home() {
   return (
-    <div className="max-w-screen-xl mx-auto grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6">
+      
+      <header className="w-full max-w-5xl flex justify-between items-center py-4">
+        <Link href="/">
+          <Image 
+            alt="Logo"
+            src='/logo-p.png'
+            height={64}
+            width={64}
+          />
+        </Link>
+        <Link href="/login">
+          <Button label="Entrar" isLoading={false} />
+        </Link>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <section className="w-full max-w-4xl text-center mt-10">
+        <motion.h2 
+          className="text-4xl font-extrabold text-gray-900"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          Bem-vindo ao Smart Money!
+        </motion.h2>
+        <p className="text-gray-600 mt-4 text-lg">
+          O lugar ideal para gerenciar suas transações e metas financeiras de forma fácil e segura.
+        </p>
+        <div className="mt-8 text-gray-700">
+          <p className="text-lg">
+            Com o <strong>Smart Money</strong>, você pode visualizar todos os seus dados financeiros em um <strong>dashboard interativo</strong>, 
+            acompanhar suas metas, analisar seu fluxo de caixa e muito mais.
+          </p>
+          <p className="mt-4 text-lg">
+            Nosso objetivo é tornar o controle das suas finanças mais intuitivo, simplificando o processo de acompanhamento e planejamento.
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </section>
+
+      <section className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+        {[
+          { title: "Segurança", desc: "Seus dados estão sempre protegidos." },
+          { title: "Facilidade", desc: "Interface intuitiva para qualquer usuário." },
+          { title: "Controle", desc: "Gerencie suas transações de forma eficaz." }
+        ].map((feature, index) => (
+          <motion.div 
+            key={index}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.2 }}
+          >
+            <Card className="shadow-md hover:shadow-lg transition">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-bold text-gray-900">{feature.title}</h3>
+                <p className="text-gray-600 mt-2">{feature.desc}</p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </section>
+
+      <section className="mt-10">
+        <Link href="/signup">
+          <Button label="Criar Conta Grátis" isLoading={false} />
+        </Link>
+      </section>
+
+      <footer className="mt-12 text-gray-500 text-sm flex flex-col justify-center items-center">
+        <p>© {new Date().getFullYear()} Smart Money. Todos os direitos reservados.</p>
+        <p className="mt-2">
+          Desenvolvido por{" "}
+          <a 
+            href="https://www.linkedin.com/in/mateus-dos-santos/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="text-blue-600 hover:underline"
+          >
+            Mateus dos Santos
+          </a>
+        </p>
       </footer>
-    </div>
+    </main>
   );
 }

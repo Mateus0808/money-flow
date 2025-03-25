@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
     response.headers.append("Set-Cookie", `moneyId=${user._id}; Path=/; HttpOnly; Secure; SameSite=Lax`);
 
     return response
-  } catch (error) {
+  } catch {
     return NextResponse.json({ message: "Erro interno no servidor" }, { status: 500 });
   }
 }

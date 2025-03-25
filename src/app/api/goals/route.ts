@@ -35,8 +35,7 @@ export async function POST(req: NextRequest) {
     const goal = await Goal.create({ userId, ...goalData });
 
     return NextResponse.json(goal, { status: 201 });
-  } catch (error) {
-    console.log("Erro ao criar meta:", error)
+  } catch {
     return NextResponse.json({ message: "Erro interno no servidor" }, { status: 500 });
   }
 }
@@ -99,7 +98,7 @@ export async function GET(req: NextRequest) {
         totalPages: Math.ceil(total / limit),
       },
     }, { status: 200 });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ message: "Erro interno no servidor" }, { status: 500 });
   }
 }
@@ -128,8 +127,7 @@ export async function DELETE(req: NextRequest) {
       { message: "Meta excluída com sucesso" },
       { status: 200 }
     );
-    } catch(error) {
-      console.log(error)
+    } catch {
       return NextResponse.json({ message: "Erro ao excluir meta" },
         { status: 500 }
       );

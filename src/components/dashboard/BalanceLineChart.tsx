@@ -8,8 +8,6 @@ interface BalanceLineChartProps {
     incomes: any;
     total?: number;
   }[]
-  // type?: "deposit" | "withdraw" | "total" | ""
-  // category?: string
 }
 
 export const BalanceLineChart = ({ data }: BalanceLineChartProps) => {

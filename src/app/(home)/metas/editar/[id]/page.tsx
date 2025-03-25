@@ -3,19 +3,14 @@
 import { use, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { GoalTypeResponse } from "@/types/goal-type";
+import { GoalTypeResponse, IGoalType } from "@/types/goal-type";
 import { goalSchema } from "@/libs/validation/goalSchema";
 
 import { FormGoal } from "@/components/goal/FormGoal";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Breadcrumb from "@/components/ui/Breadcrumb";
 import { LoadingButton } from "@/components/shared/LoadingButton";
 import { errorNotify } from "@/libs/notify/notify";
 import { useRouter } from "next/navigation";
-
-type EditGoalProps = {
-  params: { id: string };
-};
 
 export default function EditGoal({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -36,10 +31,6 @@ export default function EditGoal({ params }: { params: Promise<{ id: string }> }
   const frequency = watch('frequency')
   const showContributionField = frequency !== 'Única' && frequency !== '';
 
-  useEffect(() => {
-    getData()
-  }, [id])
-
   const getData = async () => {
     const res = await fetch('/api/goals/' + id)
     const { goal } = await res.json() as { goal: GoalTypeResponse }
@@ -53,7 +44,11 @@ export default function EditGoal({ params }: { params: Promise<{ id: string }> }
     setIsLoading(false)
   }
 
-  const onSubmit = async (data: any) => {
+  useEffect(() => {
+    getData()
+  }, [getData])
+
+  const onSubmit = async (data: IGoalType) => {
     const response = await fetch(`/api/goals/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },

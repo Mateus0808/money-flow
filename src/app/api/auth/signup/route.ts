@@ -38,8 +38,7 @@ export async function POST(req: NextRequest) {
       { message: "Usuário cadastrado com sucesso", userId: createdUser._id },
       { status: 201 }
     );
-  } catch (error) {
-    console.log(error)
+  } catch {
     return NextResponse.json({ message: "Erro interno no servidor" }, { status: 500 });
   }
 }

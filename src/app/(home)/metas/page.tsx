@@ -10,11 +10,12 @@ import { PaginationControls } from "@/components/PaginationControls";
 import { GoalCard } from "@/components/goal/GoalCard";
 import { FiltersGoal } from "@/components/goal/FiltersGoal";
 
-import LoadingGoals from "./loading";
 import { NoChartData } from "@/components/shared/NoChartData";
 import { useGoalStore } from "@/stores/useGoalStore";
 import { useGenericMutation } from "@/hooks/useGenericMutation";
 import { DeleteModalComponent } from "@/components/shared/DeleteModal";
+
+import LoadingGoals from "./loading";
 
 
 export default function ListGoalsPage() {

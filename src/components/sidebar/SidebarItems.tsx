@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Currency, LayoutDashboard, Settings, FileText, LogOut, Goal, Home } from "lucide-react";
+import { Currency, LayoutDashboard, Settings, LogOut, Goal, Home } from "lucide-react";
 import Link from "next/link";
 import clsx from "clsx";
 

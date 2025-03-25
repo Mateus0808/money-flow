@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: string; email: string, name: string };
 
     return NextResponse.json({ id: decoded.id, email: decoded.email, name: decoded.name }, { status: 200 });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ message: "Token inválido" }, { status: 401 });
   }
 }

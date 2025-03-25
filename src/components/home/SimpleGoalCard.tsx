@@ -1,6 +1,6 @@
+import { AlertCircle, CheckCircle, XCircle } from "lucide-react"
 import { EnumGoalPriority, GoalTypeResponse } from "@/types/goal-type"
 import { Tooltip } from "../ui/Tooltip"
-import { AlertCircle, CheckCircle, XCircle } from "lucide-react"
 
 interface SimpleGoalCardProps {
   goal: GoalTypeResponse

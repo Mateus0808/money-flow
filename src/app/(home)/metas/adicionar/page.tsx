@@ -40,7 +40,7 @@ export default function CreateGoal() {
     successMessage: "Meta criada com sucesso",
   });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: IGoalType) => {
     createGoalMutation.mutate(data)
     router.push('/metas')
   };

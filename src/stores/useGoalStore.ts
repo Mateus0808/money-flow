@@ -10,7 +10,6 @@ interface GoalStore {
   setLoading: (loading: boolean) => void
   pagination: PaginationType;
   setPagination: (pagination: PaginationType) => void;
-  // fetchGoals: (params?: { month?: string; year?: string; priority?: string }) => Promise<void>;
   deleteGoal: (id: string) => Promise<void>;
   createGoal: (goal: IGoalType) => Promise<void>
 }
@@ -60,38 +59,6 @@ export const useGoalStore = create<GoalStore>((set, get) => ({
       };
     });
   }
-
-  // fetchGoals: async ({ month, year, priority } = {}) => {
-  //   set({ loading: true });
-  //   try {
-  //     if (month && !year) {
-  //       set({ loading: false });
-  //       return;
-  //     }
-
-  //     const { pagination } = get();
-  //     const url = new URL('/api/goals', window.location.origin);
-
-  //     url.searchParams.set('page', pagination.page.toString());
-  //     url.searchParams.set('limit', pagination.limit.toString());
-
-  //     if (priority) url.searchParams.set('priority', priority);
-  //     if (year) {
-  //       const deadlineFilter = month ? `${year}-${month}` : `${year}`;
-  //       url.searchParams.set('deadline', deadlineFilter);
-  //     }
-
-  //     const response = await fetch(url.toString());
-  //     if (!response.ok) throw new Error('Erro ao buscar metas');
-
-  //     const result = await response.json() as GoalsResponse;
-  //     set({ goals: result.goals, pagination: result.pagination });
-  //   } catch (err) {
-  //     console.error("Erro ao buscar metas:", err);
-  //   } finally {
-  //     set({ loading: false });
-  //   }
-  // },
 }))
 
 const updatePagination = (pagination: PaginationType) => ({

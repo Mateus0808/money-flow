@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import clsx from "clsx"
 import { Filter } from "lucide-react"
 
@@ -9,31 +10,24 @@ import { Button } from "@/components/ui/Button"
 import { TransactionsTable } from "@/components/transactions/table/TransactionsTable"
 import { DashboardFilters } from "@/components/dashboard/filters/DashboardFilters"
 
-import LoadingTable from "./loading"
 import { useTransactions } from "@/hooks/useTransactions"
 import { usePaginationStore } from "@/stores/usePaginationStore"
 import { useFiltersStore } from "@/stores/useFiltersStore"
 import { useFilteredTransactions } from "@/hooks/useFilteredTransactions"
 import { usePaginatedTransactions } from "@/hooks/usePaginatedTransactions"
-import Link from "next/link"
-import { DeleteModalComponent } from "@/components/shared/DeleteModal"
+
+import LoadingTable from "./loading"
+
 
 export default function TransactionsPage () {
   const { transactionsFilters, setTransactionsFilters } = useFiltersStore();
   const { pagination, setPagination } = usePaginationStore()
   
   const {  data, isFetching: loading } = useTransactions({ limit: 'all', filters: transactionsFilters })
-  console.log("dataaaaa", data)
   const filteredTransactions = useFilteredTransactions(data?.transactions || [], transactionsFilters);
-  console.log("filteredTransactions", filteredTransactions)
   const paginatedTransactions = usePaginatedTransactions(filteredTransactions, pagination.page, pagination.limit);
-  console.log("paginatedTransactions", paginatedTransactions)
-  const [openFilter, setOpenFilter] = useState(false)
-  const [isNewTransactionOpen, setIsNewTransactionOpen] = useState(false)
 
-  const handleNewTransactionModal = () => {
-    setIsNewTransactionOpen(!isNewTransactionOpen)
-  }
+  const [openFilter, setOpenFilter] = useState(false)
 
   const toggleFiltersPanel = () => {
     setOpenFilter(!openFilter)

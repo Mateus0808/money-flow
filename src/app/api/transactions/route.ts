@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       ...rest 
     });
     return NextResponse.json(transaction, { status: 201 });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ message: "Erro ao criar transação" }, { status: 500 });
   }
 }
@@ -84,8 +84,7 @@ export async function GET(req: Request) {
         limit: limit === undefined ? 10 : limit
       }
     }, { status: 200 });
-  } catch (error) {
-    console.log("Erro get tra", error)
+  } catch {
     return NextResponse.json({ message: "Erro interno no servidor" }, { status: 500 });
   }
 }
@@ -116,8 +115,7 @@ export async function DELETE(req: NextRequest) {
       { message: "Transação excluída com sucesso" },
       { status: 200 }
     );
-  } catch(error) {
-    console.log(error)
+  } catch {
     return NextResponse.json({ message: "Erro ao excluir transação" },
       { status: 500 }
     );
