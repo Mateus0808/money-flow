@@ -13,7 +13,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           priority
           style={{ width: "400px", height: "400px" }}
         />
-        <Link href='/' className="absolute top-8 left-14">
+        <Link href='/' className="absolute top-4 left-6 md:top-8 md:left-8 lg:left-14">
           <Image
             height={64}
             width={64}

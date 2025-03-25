@@ -19,7 +19,7 @@ export const TextAreaField = ({ label, register, error }: TextAreaFieldProps) =>
         {...register}
         className={clsx(
           'rounded-md shadow-sm mt-1 block w-full px-3 py-2 border-2 border-gray-300', 
-          'text-gray-700 dark:border-gray-700 dark:text-textLight dark:bg-transparent',
+          'text-gray-700 dark:bg-cardDark dark:border-gray-700 dark:text-textLight bg-transparent',
           'focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500'
         )}
       />

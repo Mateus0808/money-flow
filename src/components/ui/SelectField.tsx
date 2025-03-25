@@ -28,7 +28,7 @@ export const SelectField = ({
       <select {...register} {...props} className={clsx(
         'mt-1 h-12 block w-full border-2 border-gray-200 rounded-md p-2',
         'focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500',
-        'text-gray-700 dark:bg-cardDark dark:text-textLight dark:border-gray-700'
+        'text-gray-700 bg-transparent dark:bg-cardDark dark:text-textLight dark:border-gray-700'
       )}>
         {showDefaultOption && <option value="">Selecione</option>}
         {options.map(({ label, value }) => (

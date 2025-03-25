@@ -24,7 +24,7 @@ export const CustomDatePicker: React.FC<DatePickerProps> = ({ label, selected, o
         dateFormat="dd/MM/yyyy"
         placeholderText="dd/mm/aaaa"
         className={clsx(
-          'w-full px-3 py-2 h-12 border rounded-lg dark:bg-transparent text-gray-700 dark:border-gray-700',
+          'w-full px-3 py-2 h-12 border rounded-lg bg-transparent dark:bg-cardDark text-gray-700 dark:border-gray-700',
           'dark:text-textLight focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500'
         )}
       />

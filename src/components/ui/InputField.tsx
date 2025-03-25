@@ -15,7 +15,7 @@ export const InputField = ({ label, register, error, ...props }: InputFieldProps
       <input 
         {...register} 
         {...props} 
-        className={clsx('h-12 text-gray-700 dark:text-textLight dark:bg-transparent',
+        className={clsx('h-12 text-gray-700 bg-transparent dark:text-textLight',
           'dark:border-gray-700 border-gray-200 rounded-md p-2 block w-full border-2', 
           'focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500'
         )} 
