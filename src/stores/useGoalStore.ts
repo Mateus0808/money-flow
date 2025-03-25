@@ -14,7 +14,7 @@ interface GoalStore {
   createGoal: (goal: IGoalType) => Promise<void>
 }
 
-export const useGoalStore = create<GoalStore>((set, get) => ({
+export const useGoalStore = create<GoalStore>((set) => ({
   goals: [],
   setGoals: (goals) => set({ goals }),
 

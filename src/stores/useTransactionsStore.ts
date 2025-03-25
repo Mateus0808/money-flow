@@ -83,7 +83,7 @@ export const useTransactionsStore = create<TransactionsStore>((set, get) => ({
       }
 
       const transaction = await res.json();
-      console.log("my transaction", transaction)
+
       set((state) => {
         const newTransactions = [transaction, ...state.transactions];
         return {

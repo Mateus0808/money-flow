@@ -6,7 +6,7 @@ interface TransactionsStore {
   setPagination: (pagination: PaginationType) => void;
 }
 
-export const usePaginationStore = create<TransactionsStore>((set, get) => ({
+export const usePaginationStore = create<TransactionsStore>((set) => ({
   pagination: { page: 1, totalPages: 1, limit: 10, total: 0 },
   setPagination: (pagination) => set({ pagination }),
 }))
