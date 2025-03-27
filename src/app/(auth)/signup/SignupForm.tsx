@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/Button";
 import { UserInput } from "@/components/ui/UserInput";
-import { errorNotify } from "@/libs/notify/notify";
+import { errorNotify, successNotify } from "@/libs/notify/notify";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link"
 import { useRouter } from "next/navigation";
@@ -52,6 +52,7 @@ export const SignupForm = () => {
     const data = await response.json();
 
     if (response.ok) {
+      successNotify(data.message || 'Cadastro realizado com sucesso!')
       router.push("/login")
     } else {
       errorNotify(data.message || 'Erro ao realizar cadastro')
