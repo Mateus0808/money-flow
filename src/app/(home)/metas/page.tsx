@@ -53,8 +53,6 @@ export default function ListGoalsPage() {
     setGoalIdToDelete(null);
   };
 
-  if (isFetching) return <LoadingGoals />
-
   return (
     <div className="min-h-screen">
       <div className="w-full bg-white dark:bg-cardDark mx-auto p-6 rounded-lg shadow-lg mb-6">
@@ -82,20 +80,23 @@ export default function ListGoalsPage() {
           Adicionar meta
         </Link>
       </div>
-
-      {data?.goals.length === 0 
-        ? <div className="w-full h-[194px] flex items-center justify-center">
-            <NoChartData label="🔍 Nenhum objetivo disponível"/> 
-          </div>
+      {isFetching 
+        ? <LoadingGoals />
         : (
-          <>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {data?.goals && data?.goals?.map((goal, index) => (
-                <GoalCard key={index} goal={goal} handleOpenModal={() => handleOpenModal(goal._id)} />
-              ))}
-            </div>
-            <PaginationControls pagination={data?.pagination || pagination} setPagination={setPagination} />
-          </>
+          data?.goals.length === 0 
+            ? <div className="w-full h-[194px] flex items-center justify-center">
+                <NoChartData label="🔍 Nenhum objetivo disponível"/> 
+              </div>
+            : (
+              <>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {data?.goals && data?.goals?.map((goal, index) => (
+                    <GoalCard key={index} goal={goal} handleOpenModal={() => handleOpenModal(goal._id)} />
+                  ))}
+                </div>
+                <PaginationControls pagination={data?.pagination || pagination} setPagination={setPagination} />
+              </>
+            )
         )
       }
     </div>
