@@ -2,7 +2,10 @@ import { EnumGoalPriority } from "@/types/goal-type";
 import { z } from "zod";
 
 export const goalSchema = z.object({
-  goalName: z.string().min(3, 'O nome da meta deve ter pelo menos 3 caracteres.'),
+  goalName: z
+    .string()
+    .min(3, 'O nome deve ter pelo menos 3 caracteres.')
+    .max(20, "O nome deve ter no máximo 20 caracteres."),
   goalType: z.string().nonempty('Selecione o tipo de meta.'),
   targetAmount: z.number().positive('O valor alvo deve ser maior que zero.'),
   initialAmount: z.number().min(0, 'O valor inicial não pode ser negativo.'),
@@ -23,7 +26,7 @@ export const goalSchema = z.object({
   ], {
     errorMap: () => ({ message: "Selecione uma prioridade válida." }),
   }),
-  description: z.string().optional(),
+  description: z.string().max(140, "A descrição deve ter no máximo 140 caracteres").optional(),
   reminder: z.boolean(),
 }).superRefine((data, ctx) => {
   if (data.frequency === "Única") {

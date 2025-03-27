@@ -6,7 +6,10 @@ const categorySchema = z.object({
 });
 
 export const transactionSchema = z.object({
-  title: z.string().min(3, "O título deve ter pelo menos 3 caracteres."),
+  title: z
+    .string()
+    .min(3, "O título deve ter pelo menos 3 caracteres.")
+    .max(20, "O título deve ter no máximo 20 caracteres."),
   amount: z.preprocess(
     (value) => (typeof value === "number" ? value : 0), 
     z.number().positive("O valor deve ser maior que zero."),
