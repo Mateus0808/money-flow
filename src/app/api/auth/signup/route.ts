@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     const createdUser = await User.create({ name, email, password })
 
     return NextResponse.json(
-      { message: "Usuário cadastrado com sucesso", userId: createdUser._id },
+      { message: "Cadastro realizado com sucesso!", userId: createdUser._id },
       { status: 201 }
     );
   } catch {
