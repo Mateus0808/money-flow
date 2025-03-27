@@ -2,6 +2,7 @@ import Image from "next/image"
 import { Currency, LayoutDashboard, Settings, LogOut, Goal, Home } from "lucide-react";
 import Link from "next/link";
 import clsx from "clsx";
+import { usePathname } from "next/navigation";
 
 const menuItems = [
   { name: "Home", icon: <Home size={24} />, path: "/home" },
@@ -19,6 +20,7 @@ interface SidebaritemsProps {
 }
 
 export const SidebarItems = ({ handleLogout, theme, setTheme }: SidebaritemsProps) => {
+  const pathname = usePathname()
   return (
     <aside
       className={clsx(
@@ -35,7 +37,12 @@ export const SidebarItems = ({ handleLogout, theme, setTheme }: SidebaritemsProp
           <Link
             key={index}
             href={item.path}
-            className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 hover:text-black transition"
+            className={clsx(
+              'flex items-center font-medium gap-3 p-2 rounded-lg transition',
+              pathname === item.path
+                ? "bg-gray-100 text-gray-800 dark:text-gray-700"
+                : "hover:bg-gray-100 hover:text-gray-800"
+            )}
           >
             {item.icon}
             <span className="hidden md:block text-sm">{item.name}</span>
@@ -44,7 +51,7 @@ export const SidebarItems = ({ handleLogout, theme, setTheme }: SidebaritemsProp
 
         <button
           onClick={() => handleLogout()}
-          className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 hover:text-black transition"
+          className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 hover:text-gray-800 transition"
         >
           <LogOut size={24} />
           <span className="hidden md:block text-sm">Sair</span>
@@ -53,7 +60,7 @@ export const SidebarItems = ({ handleLogout, theme, setTheme }: SidebaritemsProp
         <button
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           className={clsx(
-            "p-2 rounded-lg bg-gray-200 hover:bg-gray-300 hover:text-black text-gray-800",
+            "p-2 rounded-lg bg-gray-100 hover:bg-gray-300 hover:text-black text-gray-800",
             "dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white",
             "flex items-center justify-center gap-2 transition duration-200"
           )}
