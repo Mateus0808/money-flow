@@ -5,9 +5,9 @@ export default async function HomeLayout({
 }: { children: React.ReactNode }
 ) {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex flex-col lg:flex-row min-h-screen">
       <Sidebar />
-      <main className="max-w-screen-xl mx-auto flex-1 py-8 px-8">
+      <main className="max-w-screen-xl mx-auto w-full flex-1 py-8 px-8">
         { children }
       </main>
     </div>

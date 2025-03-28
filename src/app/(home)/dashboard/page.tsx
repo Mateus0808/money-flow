@@ -46,7 +46,8 @@ export default function DashboardPage() {
         <FilterButton openFilter={openFilter} toggleFiltersPanel={toggleFiltersPanel} />
         {openFilter && 
           <DashboardFilters 
-            toggleFiltersPanel={toggleFiltersPanel}
+            setOpenFilter={toggleFiltersPanel}
+            openFilter={openFilter}
             filters={dashboardFilters}
             setFilters={setDashboardFilters}
             isDashboard={true}
