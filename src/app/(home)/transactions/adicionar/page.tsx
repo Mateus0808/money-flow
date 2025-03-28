@@ -49,7 +49,7 @@ export default function CreateTransaction () {
   }
 
   return (
-    <div className="min-h-screen rounded-lg flex flex-col justify-start items-center">
+    <div className="min-h-screen rounded-lg flex flex-col justify-center items-center">
       <div className="max-w-2xl bg-white dark:bg-cardDark p-6 rounded-lg shadow-md w-full">
         <h1 className="text-2xl text-gray-700 dark:text-textLight font-semibold mb-4">Nova Transação</h1>
 
@@ -146,6 +146,7 @@ export default function CreateTransaction () {
             name="is_recurring"
             render={({ field }) => (
               <SelectField
+                tooltipMessage="Escolha 'Sim' se este valor se repete periodicamente, como uma assinatura. Escolha 'Não' para valores únicos."
                 label="Valor Fixo"
                 showDefaultOption={false}
                 options={[

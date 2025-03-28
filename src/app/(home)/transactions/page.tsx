@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import clsx from "clsx"
 import { Filter } from "lucide-react"
@@ -30,7 +30,7 @@ export default function TransactionsPage () {
   const [openFilter, setOpenFilter] = useState(false)
 
   const toggleFiltersPanel = () => {
-    setOpenFilter(!openFilter)
+    setOpenFilter((prev) => !prev);
   }
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function TransactionsPage () {
 
   return (
     <div className="min-h-screen">
-      <div className="relative bg-white dark:bg-cardDark p-4 rounded-lg shadow-md flex justify-between items-center gap-4">
+      <div className="-z-10 relative bg-white dark:bg-cardDark p-4 rounded-lg shadow-md flex justify-between items-center gap-4">
         <h1 className="text-2xl text-primary font-bold dark:text-textLight">Transações</h1>
 
         <button
@@ -59,16 +59,17 @@ export default function TransactionsPage () {
           <Filter className={`text-gray-600 ${openFilter ? 'text-blue-600' : 'dark:text-textLight'}`} size={24} />
           <span className={`font-bold text-gray-600 ${openFilter ? 'text-blue-600' : 'dark:text-textLight'}`}>Filtros</span>
         </button>
-        {openFilter && 
+        {openFilter &&
           <DashboardFilters 
-            toggleFiltersPanel={toggleFiltersPanel}
+            setOpenFilter={setOpenFilter}
+            openFilter={openFilter}
             filters={transactionsFilters}
             setFilters={setTransactionsFilters}
           />
         }
       </div>
       <div className="space-y-4 rounded-lg bg-white dark:bg-cardDark p-4 mt-8">
-        <Link href="/transactions/adicionar" className="w-44 flex float-end mb-3">
+        <Link href="/transactions/adicionar" className="-z-10 w-44 flex float-end mb-3">
           <Button label="Nova Transação" isLoading={false} />
         </Link>
         { loading 
