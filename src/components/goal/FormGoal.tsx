@@ -5,7 +5,6 @@ import {
 } from "react-hook-form"
 import clsx from "clsx"
 
-import { CheckBoxField } from "../ui/CheckBoxField"
 import { InputField } from "../ui/InputField"
 import { SelectField } from "../ui/SelectField"
 import { TextAreaField } from "../ui/TextAreaField"
