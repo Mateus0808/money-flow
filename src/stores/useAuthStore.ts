@@ -1,3 +1,4 @@
+import { ICreateUser, ICreateUserResponse } from "@/types/user";
 import { QueryClient } from "@tanstack/react-query";
 import { create } from "zustand";
 
@@ -16,6 +17,7 @@ interface AuthStore {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<LoginResponse>;
+  signup: (createUser: ICreateUser) => Promise<ICreateUserResponse>
   logout: (queryClient: QueryClient) => Promise<void>;
   checkAuth: () => Promise<void>;
 }
@@ -45,11 +47,34 @@ export const useAuthStore = create<AuthStore>((
         success: true
       }
     } else {
+      set({ loading: false })
       return {
         message: data.message,
         success: false
       }
     }
+  },
+
+  signup: async ({ name, email, password }: ICreateUser) => {
+    set({ loading: true })
+
+    const response = await fetch("/api/auth/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email, password }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      set({ loading: false });
+      return { message: data.message, success: false }
+    }
+
+    set({ loading: false })
+    return { message: data.message, success: true }
   },
 
   logout: async (queryClient: QueryClient) => {
