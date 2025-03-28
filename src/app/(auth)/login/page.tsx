@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+
 const loginSchema = z.object({
   email: z.string().email({ message: "Digite um e-mail válido." }),
   password: z.string().min(8, { message: "A senha contém pelo menos 8 caracteres." })
@@ -20,7 +21,7 @@ export default function SignInPage() {
   const router = useRouter()
   const queryClient = useQueryClient();
 
-  const { login } = useAuthStore()
+  const { login, loading } = useAuthStore()
 
   const {
     register,
@@ -54,7 +55,7 @@ export default function SignInPage() {
         onSubmit={handleSubmit(onSubmit)}
         register={register}
         errors={errors}
-        isLoading={isLoading}
+        isLoading={loading || isLoading}
       />
     </div>
   );
