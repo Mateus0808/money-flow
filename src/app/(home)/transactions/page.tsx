@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import clsx from "clsx"
-import { Filter } from "lucide-react"
 
 import { PaginationControls } from "@/components/PaginationControls"
 import { Button } from "@/components/ui/Button"
 import { TransactionsTable } from "@/components/transactions/table/TransactionsTable"
 import { DashboardFilters } from "@/components/dashboard/filters/DashboardFilters"
+import { FilterButton } from "@/components/ui/FilterButton"
 
 import { useTransactions } from "@/hooks/useTransactions"
 import { usePaginationStore } from "@/stores/usePaginationStore"
@@ -17,7 +16,6 @@ import { useFilteredTransactions } from "@/hooks/useFilteredTransactions"
 import { usePaginatedTransactions } from "@/hooks/usePaginatedTransactions"
 
 import LoadingTable from "./loading"
-import { FilterButton } from "@/components/ui/FilterButton"
 
 
 export default function TransactionsPage () {
