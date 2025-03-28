@@ -1,7 +1,4 @@
 import { 
-  CheckCircle, 
-  AlertCircle, 
-  XCircle, 
   CalendarClock, 
   RefreshCcw, 
   Target, 
@@ -11,21 +8,16 @@ import {
   Goal
 } from "lucide-react";
 import Link from "next/link";
-import { Tooltip } from "../ui/Tooltip";
-import { EnumGoalPriority, GoalTypeResponse } from "@/types/goal-type";
+import Image from "next/image";
+import { TruncateTooltip } from "../ui/tooltips/TruncateTooltip";
+import { GoalTypeResponse } from "@/types/goal-type";
 import { reverseGoalMapping } from "@/utils/reverse-goal-mapping";
 import { formatDate } from "@/utils/format-date";
 
 const priorityIcons = {
-  Baixa: <CheckCircle className="text-green-600" size={18} />,
-  Média: <AlertCircle className="text-orange-600" size={18} />,
-  Alta: <XCircle className="text-red-600" size={18} />,
-};
-
-const priorityColor = {
-  [EnumGoalPriority.LOW]: "bg-green-400",
-  [EnumGoalPriority.MEDIUM]: "bg-orange-400",
-  [EnumGoalPriority.HIGH]: "bg-red-400",
+  Baixa: '/low.svg',
+  Média: '/medium.svg',
+  Alta: '/high.svg'
 };
 
 type GoalCardProps = {
@@ -41,17 +33,20 @@ export const GoalCard = ({ goal, handleOpenModal }: GoalCardProps) => {
   return (
     <div className="flex flex-col gap-4 shadow-lg p-6 bg-white dark:bg-cardDark rounded-lg">
       <div className="flex justify-between items-center">
-        <Tooltip content={goal.goalName}>
+        <TruncateTooltip content={goal.goalName}>
           <div className="flex items-center gap-2">
             <Goal size={20} className="text-orange-600"/>
             <p className="font-semibold text-gray-700 text-lg dark:text-white truncate whitespace-nowrap max-w-full cursor-pointer">
               {goal.goalName}
             </p>
           </div>          
-        </Tooltip>
-        <span className={`${priorityColor[goal.priority]} flex items-center gap-2 px-3 py-1 rounded text-white text-sm`}>
-          {priorityIcons[goal.priority]} {goal.priority}
-        </span>
+        </TruncateTooltip>
+        <Image 
+          src={priorityIcons[goal.priority]}
+          alt="Priority Icon"
+          height={24}
+          width={24}
+        />
       </div>
 
       <div className="w-full bg-gray-300 dark:bg-gray-400 h-4 rounded-full">

@@ -130,7 +130,7 @@ export const FormGoal = ({
         control={control}
         render={({ field, fieldState: { error } }) => (
           <CustomDatePicker
-            label="Data Limite"
+            label="Data Limite *"
             selected={field.value ? field.value : null}
             onChange={(date) => field.onChange(date)}
             error={error?.message}
@@ -150,11 +150,6 @@ export const FormGoal = ({
         label="Descrição" 
         register={register("description")}
         error={errors.description?.message}
-      />
-      <CheckBoxField 
-        label="Receber lembretes periódicos" 
-        register={register("reminder")}
-        error={errors.reminder?.message} 
       />
       <div className="flex justify-end gap-2">
         <Link href="/metas" className={clsx(

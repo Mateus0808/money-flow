@@ -11,7 +11,6 @@ export interface IGoal extends Document {
   frequency: string;
   priority: string;
   description?: string
-  reminder?: boolean
 }
 
 const GoalSchema = new Schema<IGoal>({
@@ -24,8 +23,7 @@ const GoalSchema = new Schema<IGoal>({
   deadline: { type: Date, required: true },
   frequency: { type: String, required: true },
   priority: { type: String, required: true },
-  description: { type: String, required: false },
-  reminder: { type: Boolean, required: false }
+  description: { type: String, required: false }
 }, {
   timestamps: true,
 });

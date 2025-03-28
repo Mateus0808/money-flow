@@ -16,7 +16,7 @@ interface SignupUIFormProps {
 }
 
 export const SignupUIForm = ({ errors, isLoading, onSubmit, register }: SignupUIFormProps) => {
-  console.log("isLoading signup", isLoading)
+
   return (
     <form className="space-y-6" onSubmit={onSubmit}>
       <UserInput 

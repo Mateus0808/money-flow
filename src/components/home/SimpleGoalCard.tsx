@@ -1,6 +1,6 @@
 import { AlertCircle, CheckCircle, Goal, XCircle } from "lucide-react"
 import { EnumGoalPriority, GoalTypeResponse } from "@/types/goal-type"
-import { Tooltip } from "../ui/Tooltip"
+import { TruncateTooltip } from "../ui/tooltips/TruncateTooltip"
 
 interface SimpleGoalCardProps {
   goal: GoalTypeResponse
@@ -26,11 +26,11 @@ export const SimpleGoalCard = ({ goal }: SimpleGoalCardProps) => {
       <div className="flex justify-between items-center gap-2"> 
         <div className="flex items-center gap-1">
           <Goal size={20} className="text-orange-600"/>
-          <Tooltip content={goal.goalName}>
+          <TruncateTooltip content={goal.goalName}>
             <p className="font-semibold text-gray-700 text-md dark:text-white">
               {goal.goalName}
             </p>
-          </Tooltip>
+          </TruncateTooltip>
         </div>
         <span className={`${priorityColor[goal.priority]} flex items-center gap-2 px-3 py-1 rounded text-white text-sm`}>
           {priorityIcons[goal.priority]} {goal.priority}

@@ -26,8 +26,7 @@ export const goalSchema = z.object({
   ], {
     errorMap: () => ({ message: "Selecione uma prioridade válida." }),
   }),
-  description: z.string().max(140, "A descrição deve ter no máximo 140 caracteres").optional(),
-  reminder: z.boolean(),
+  description: z.string().max(140, "A descrição deve ter no máximo 140 caracteres").optional()
 }).superRefine((data, ctx) => {
   if (data.frequency === "Única") {
     data.contribution = data.initialAmount 

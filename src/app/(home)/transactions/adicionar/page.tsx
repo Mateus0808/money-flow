@@ -74,7 +74,7 @@ export default function CreateTransaction () {
                 decimalSeparator=","
                 decimalScale={2}
                 allowNegative={false}
-                label="Valor"
+                label="Valor *"
                 error={error?.message}
                 placeholder="R$ 0,00"
                 {...props}
@@ -83,7 +83,7 @@ export default function CreateTransaction () {
           />
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-textLight">Categoria</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-textLight">Categoria *</label>
             <TransactionCategories 
               {...register('groupCategory')}
               isCreateTransaction={true}
@@ -93,7 +93,7 @@ export default function CreateTransaction () {
 
           <div className="flex flex-col gap-1">
             <label className="block text-sm font-medium text-gray-700 dark:text-textLight" htmlFor="type">
-              Tipo de Transação
+              Tipo de Transação *
             </label>
             <div className="grid grid-cols-2 gap-4">
               <RadioBox
@@ -119,7 +119,7 @@ export default function CreateTransaction () {
               control={control}
               render={({ field, fieldState: { error } }) => (
                 <CustomDatePicker
-                  label="Data da Transação"
+                  label="Data da Transação *"
                   selected={field.value ? field.value : null}
                   onChange={(date) => field.onChange(date)}
                   error={error?.message}
@@ -128,7 +128,7 @@ export default function CreateTransaction () {
             />
 
             <SelectField
-              label="Forma de Pagamento"
+              label="Forma de Pagamento *"
               register={register("payment_method")}
               options={[
                 { value: "credit_card", label: "Cartão de Crédito" },

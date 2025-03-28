@@ -16,7 +16,6 @@ export interface IGoalType {
   frequency: string
   deadline: Date
   description?: string
-  reminder: boolean
 }
   
 export interface GoalTypeResponse extends IGoalType {

@@ -6,7 +6,7 @@ import { formatDate } from "@/utils/format-date";
 import { reverseCategoryMapping } from "@/utils/reverse-category-mapping";
 
 import { ItemTDTable } from "./ItemTDTable";
-import { Tooltip } from "@/components/ui/Tooltip";
+import { TruncateTooltip } from "@/components/ui/tooltips/TruncateTooltip";
 
 
 interface ItemTransactionProps {
@@ -30,7 +30,7 @@ export const ItemTransaction = ({
   return (
     <tr className="relative border-b lg:border-none">
       <ItemTDTable>
-        <Tooltip content={title}>{title}</Tooltip>
+        <TruncateTooltip content={title}>{title}</TruncateTooltip>
       </ItemTDTable>
       <ItemTDTable>
         <span className={`${type == 'income' ? 'text-green-600' : 'text-red-600'}`}>

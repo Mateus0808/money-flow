@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import { SelectHTMLAttributes } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
-import { Tooltip } from "./Tooltip";
 import { CircleHelp } from "lucide-react";
+import { InfoTooltip } from "./tooltips/InfoTooltip";
 
 interface SelectFieldProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
@@ -24,16 +24,17 @@ export const SelectField = ({
   tooltipMessage,
   ...props
 }: SelectFieldProps) => {
+
   return (
-    <div className="w-full">
+    <div className="relative w-full">
       <div className="flex gap-1 items-center">
         <label className={clsx(classLabel)}>
           {label}
         </label>
         {tooltipMessage &&
-          <Tooltip content={tooltipMessage}>
+          <InfoTooltip content={tooltipMessage}>
             <CircleHelp size={16} className="text-yellow-600" />
-          </Tooltip>
+          </InfoTooltip>
         }
       </div>
       <select {...register} {...props} className={clsx(
