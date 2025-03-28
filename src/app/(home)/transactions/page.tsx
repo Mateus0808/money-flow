@@ -17,6 +17,7 @@ import { useFilteredTransactions } from "@/hooks/useFilteredTransactions"
 import { usePaginatedTransactions } from "@/hooks/usePaginatedTransactions"
 
 import LoadingTable from "./loading"
+import { FilterButton } from "@/components/ui/FilterButton"
 
 
 export default function TransactionsPage () {
@@ -29,9 +30,7 @@ export default function TransactionsPage () {
 
   const [openFilter, setOpenFilter] = useState(false)
 
-  const toggleFiltersPanel = () => {
-    setOpenFilter((prev) => !prev);
-  }
+  const toggleFiltersPanel = () => setOpenFilter(!openFilter);
 
   useEffect(() => {
     const totalPages = Math.ceil(filteredTransactions.length / pagination.limit);
@@ -45,23 +44,13 @@ export default function TransactionsPage () {
 
   return (
     <div className="min-h-screen">
-      <div className="-z-10 relative bg-white dark:bg-cardDark p-4 rounded-lg shadow-md flex justify-between items-center gap-4">
+      <div className="relative bg-white dark:bg-cardDark p-4 rounded-lg shadow-md flex justify-between items-center gap-4">
         <h1 className="text-2xl text-primary font-bold dark:text-textLight">Transações</h1>
 
-        <button
-          onClick={() => toggleFiltersPanel()} 
-          className={clsx(
-            "flex gap-2 items-center p-2 rounded-lg transition duration-150",
-            "hover:bg-gray-400 hover:bg-opacity-20",
-            openFilter && "bg-gray-300 bg-opacity-10"
-          )}
-        >
-          <Filter className={`text-gray-600 ${openFilter ? 'text-blue-600' : 'dark:text-textLight'}`} size={24} />
-          <span className={`font-bold text-gray-600 ${openFilter ? 'text-blue-600' : 'dark:text-textLight'}`}>Filtros</span>
-        </button>
+        <FilterButton openFilter={openFilter} toggleFiltersPanel={toggleFiltersPanel} />
         {openFilter &&
           <DashboardFilters 
-            setOpenFilter={setOpenFilter}
+            setOpenFilter={toggleFiltersPanel}
             openFilter={openFilter}
             filters={transactionsFilters}
             setFilters={setTransactionsFilters}
