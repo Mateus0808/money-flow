@@ -6,6 +6,7 @@ import { formatDate } from "@/utils/format-date";
 import { reverseCategoryMapping } from "@/utils/reverse-category-mapping";
 
 import { ItemTDTable } from "./ItemTDTable";
+import { Tooltip } from "@/components/ui/Tooltip";
 
 
 interface ItemTransactionProps {
@@ -27,8 +28,10 @@ export const ItemTransaction = ({
   const mappedCategory = reverseCategoryMapping[category] || category;
 
   return (
-    <tr className="border-b md:border-none">
-      <ItemTDTable>{title}</ItemTDTable>
+    <tr className="relative border-b lg:border-none">
+      <ItemTDTable>
+        <Tooltip content={title}>{title}</Tooltip>
+      </ItemTDTable>
       <ItemTDTable>
         <span className={`${type == 'income' ? 'text-green-600' : 'text-red-600'}`}>
           {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(amount)}

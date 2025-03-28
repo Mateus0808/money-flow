@@ -6,7 +6,7 @@ interface ItemTDTableProps {
 
 export const ItemTDTable = ({ children }: ItemTDTableProps) => {
   return (
-    <td className="px-2 py-3 md:px-6 md:py-3 text-gray-900 dark:text-textLight">
+    <td scope="row" className="max-w-[140px] px-2 py-3 text-nowrap md:px-6 text-gray-900 dark:text-textLight">
       {children}
     </td>
   )

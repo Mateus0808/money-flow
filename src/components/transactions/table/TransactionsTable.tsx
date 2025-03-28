@@ -49,11 +49,11 @@ export const TransactionsTable = ({ transactions, showActions = false }: Transac
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full relative overflow-x-auto">
       {deleteModal &&
         <DeleteModalComponent handleDeleteItem={handleDeleteTransaction} cancelAction={handleCloseModal} />
       }
-      <table className="w-full bg-white dark:bg-cardDark min-w-[350px]">
+      <table className="w-full table-fixed md:table-auto bg-white dark:bg-cardDark">
         <thead className="bg-inherit">
           <HeaderTable showActions={showActions} />
         </thead>
