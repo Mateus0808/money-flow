@@ -1,5 +1,5 @@
 import { XCircle } from "lucide-react"
-import { useEffect} from "react"
+import { useEffect, useRef} from "react"
 import { Controller, useForm } from "react-hook-form"
 
 import { ITransactionFilters } from "@/types/filters"
@@ -11,12 +11,6 @@ import { SelectField } from "@/components/ui/SelectField"
 
 import { TransactionCategories } from "../../shared/TransactionCategories"
 
-interface DashboardFiltersProps {
-  toggleFiltersPanel: () => void
-  filters: ITransactionFilters
-  setFilters: (value: ITransactionFilters) => void
-  isDashboard?: boolean
-}
 
 const transactionTypeOptions = [
   { value: 'income', label: 'Entradas' },
@@ -28,12 +22,24 @@ const dashboardTransactionTypeOptions = [
   { value: 'total', label: 'Total' },
 ];
 
+interface DashboardFiltersProps {
+  setOpenFilter: (value: boolean) => void
+  openFilter: boolean
+  filters: ITransactionFilters
+  setFilters: (value: ITransactionFilters) => void
+  isDashboard?: boolean
+}
+
+
 export const DashboardFilters = ({ 
-  toggleFiltersPanel, filters, setFilters, isDashboard
+  setOpenFilter, openFilter, filters, setFilters, isDashboard
 }: DashboardFiltersProps) => {
-  const { register, handleSubmit, control, reset, watch, setValue } = useForm<ITransactionFilters>({
+  const { 
+    register, handleSubmit, control, reset, watch, setValue 
+  } = useForm<ITransactionFilters>({
     defaultValues: filters,
   });
+  const filterRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     reset(filters);
@@ -54,7 +60,7 @@ export const DashboardFilters = ({
     if (hasChanged && isValid) {
       setFilters(data);
     }
-    toggleFiltersPanel();
+    setOpenFilter(false);
   };
 
   const handleDateChange = (name: "startDate" | "endDate", date: Date | null) => {
@@ -89,15 +95,32 @@ export const DashboardFilters = ({
     });
   };
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
+        setOpenFilter(false);
+      }
+    }
+
+    if (openFilter) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [openFilter]);
+
   return (
     <form 
+      ref={filterRef}
       onSubmit={handleSubmit(onSubmit)}
       className="z-50 absolute top-16 right-4 max-w-96 border-2 bg-white shadow-lg dark:border-gray-500 dark:bg-cardDark rounded-lg p-4">
       <div className="relative flex w-full justify-between">
         <p className="dark:text-textLight text-md font-semibold text-gray-600">Filtros</p>
         <button 
           type="button" 
-          onClick={toggleFiltersPanel} 
+          onClick={() => setOpenFilter(false)} 
           className="dark:text-textLight text-gray-700 flex gap-2 items-center hover:opacity-80 rounded-full">
           <XCircle size={24} />
         </button>
