@@ -14,9 +14,21 @@ export default function Sidebar() {
   const { logout } = useAuthStore()
   const router = useRouter()
   const [mounted, setMounted] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false)
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setOpenMenu(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   if (!mounted) return null; 
@@ -32,6 +44,8 @@ export default function Sidebar() {
       handleLogout={handleLogout}
       theme={theme}
       setTheme={setTheme}
+      openMenu={openMenu}
+      setOpenMenu={setOpenMenu}
     />
   );
 }
